@@ -880,13 +880,7 @@ init_ui_manager()
 #undef DEFINE_ACTION_2
 #undef DEFINE_ACTION_SIG
 
-	Glib::ustring ui_info =
-		"<ui>"
-		"	<popup name='menu-toolbox' action='menu-toolbox'>"
-		"	<menu action='menu-file'>"
-		"	</menu>"
-		"	</popup>"
-		"	<popup name='menu-main' action='menu-main'>"
+	Glib::ustring menu_items =
 		"	<menu action='menu-file'>"
 		"		<menuitem action='new' />"
 		"		<menuitem action='open' />"
@@ -955,9 +949,9 @@ init_ui_manager()
 
 	for (list<int>::iterator iter = CanvasView::get_pixel_sizes().begin();
 			iter != CanvasView::get_pixel_sizes().end(); iter++)
-		ui_info += strprintf("<menuitem action='lowres-pixel-%d' />", *iter);
+		menu_items += strprintf("<menuitem action='lowres-pixel-%d' />", *iter);
 
-	ui_info +=
+	menu_items +=
 		"		</menu>"
 		"		<separator name='bleh08'/>"
 		"		<menuitem action='play'/>"
@@ -1008,9 +1002,26 @@ init_ui_manager()
 		"	</menu>"
 		"	<menu action='menu-keyframe'>"
 		"		<menuitem action='keyframe-properties'/>"
+		"	</menu>";
+
+	Glib::ustring ui_info =
+		"<ui>"
+		"	<popup name='menu-toolbox' action='menu-toolbox'>"
+		"	<menu action='menu-file'>"
 		"	</menu>"
 		"	</popup>"
+
+		// canvas window popup menus
+		"	<popup name='menu-main' action='menu-main'>"
+		+ menu_items +
+		"	</popup>"
+
+		// canvas window menubar menus
+		"	<menubar name='menu-menubar' action='menu-main'>"
+		+ menu_items +
+		"	</menubar>"
 		"</ui>";
+
 
 	try
 	{
