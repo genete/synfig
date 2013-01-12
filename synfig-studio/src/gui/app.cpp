@@ -787,7 +787,8 @@ init_ui_manager()
 #define DEFINE_ACTION2(x,stock,label) { Glib::RefPtr<Gtk::Action> action( Gtk::Action::create(x, stock,label,label) ); actions_action_group->add(action); }
 #define DEFINE_ACTION_SIG(group,x,stock,sig) { Glib::RefPtr<Gtk::Action> action( Gtk::Action::create(x, stock) ); group->add(action,sig); }
 
-	DEFINE_ACTION2("keyframe-properties", Gtk::StockID("gtk-properties"), _("Keyframe Properties"));
+	DEFINE_ACTION2("keyframe-properties", Gtk::StockID("gtk-properties"),
+			_("Keyframe Properties"));
 	DEFINE_ACTION("about", Gtk::StockID("synfig-about"));
 	DEFINE_ACTION("new", Gtk::Stock::NEW);
 	DEFINE_ACTION("open", Gtk::Stock::OPEN);
@@ -826,7 +827,8 @@ init_ui_manager()
 	DEFINE_ACTION("mask-radius-ducks", _("Show Radius Ducks"));
 	DEFINE_ACTION("mask-width-ducks", _("Show Width Ducks"));
 	DEFINE_ACTION("mask-angle-ducks", _("Show Angle Ducks"));
-	DEFINE_ACTION("mask-widthpoint-position-ducks", _("Show WidthPoints Position Ducks"));
+	DEFINE_ACTION("mask-widthpoint-position-ducks",
+		_("Show WidthPoints Position Ducks"));
 	DEFINE_ACTION("quality-00", _("Use Parametric Renderer"));
 	DEFINE_ACTION("quality-01", _("Use Quality Level 1"));
 	DEFINE_ACTION("quality-02", _("Use Quality Level 2"));
@@ -838,8 +840,10 @@ init_ui_manager()
 	DEFINE_ACTION("quality-08", _("Use Quality Level 8"));
 	DEFINE_ACTION("quality-09", _("Use Quality Level 9"));
 	DEFINE_ACTION("quality-10", _("Use Quality Level 10"));
-	for(list<int>::iterator iter = CanvasView::get_pixel_sizes().begin(); iter != CanvasView::get_pixel_sizes().end(); iter++)
-		DEFINE_ACTION(strprintf("lowres-pixel-%d", *iter), strprintf(_("Set Low-Res pixel size to %d"), *iter));
+	for (list<int>::iterator iter = CanvasView::get_pixel_sizes().begin();
+			iter != CanvasView::get_pixel_sizes().end(); iter++)
+		DEFINE_ACTION(strprintf("lowres-pixel-%d", *iter),
+			strprintf(_("Set Low-Res pixel size to %d"), *iter));
 	DEFINE_ACTION("play", _("Play"));
 	// DEFINE_ACTION("pause", _("Pause"));
 	DEFINE_ACTION("stop", _("Stop"));
@@ -848,8 +852,10 @@ init_ui_manager()
 	DEFINE_ACTION("toggle-guide-show", _("Toggle Guide Show"));
 	DEFINE_ACTION("toggle-guide-snap", _("Toggle Guide Snap"));
 	DEFINE_ACTION("toggle-low-res", _("Toggle Low-Res"));
-	DEFINE_ACTION("decrease-low-res-pixel-size", _("Decrease Low-Res Pixel Size"));
-	DEFINE_ACTION("increase-low-res-pixel-size", _("Increase Low-Res Pixel Size"));
+	DEFINE_ACTION("decrease-low-res-pixel-size",
+		_("Decrease Low-Res Pixel Size"));
+	DEFINE_ACTION("increase-low-res-pixel-size",
+		_("Increase Low-Res Pixel Size"));
 	DEFINE_ACTION("toggle-onion-skin", _("Toggle Onion Skin"));
 	DEFINE_ACTION("canvas-zoom-in", Gtk::StockID("gtk-zoom-in"));
 	DEFINE_ACTION("canvas-zoom-out", Gtk::StockID("gtk-zoom-out"));
@@ -865,11 +871,8 @@ init_ui_manager()
 	DEFINE_ACTION("seek-prev-second", _("Seek Backward"));
 	DEFINE_ACTION("seek-begin", _("Seek to Begin"));
 	DEFINE_ACTION("seek-end", _("Seek to End"));
-
 	DEFINE_ACTION("action-group_add", _("Add group"));
-
 	DEFINE_ACTION("canvas-new", _("New Canvas"));
-
 	DEFINE_ACTION("amount-inc", _("Increase Amount"));
 	DEFINE_ACTION("amount-dec", _("Decrease Amount"));
 
@@ -877,169 +880,149 @@ init_ui_manager()
 #undef DEFINE_ACTION_2
 #undef DEFINE_ACTION_SIG
 
-    Glib::ustring ui_info =
-"<ui>"
-"	<popup name='menu-toolbox' action='menu-toolbox'>"
-"	<menu action='menu-file'>"
-"	</menu>"
-"	</popup>"
-"	<popup name='menu-main' action='menu-main'>"
-"	<menu action='menu-file'>"
-"		<menuitem action='new' />"
-"		<menuitem action='open' />"
-"		<menuitem action='save' />"
-"		<menuitem action='save-as' />"
-"		<menuitem action='revert' />"
-"		<separator name='bleh01'/>"
-"		<menuitem action='cvs-add' />"
-"		<menuitem action='cvs-update' />"
-"		<menuitem action='cvs-commit' />"
-"		<menuitem action='cvs-revert' />"
-"		<separator name='bleh02'/>"
-"		<menuitem action='import' />"
-"		<separator name='bleh03'/>"
-"		<menuitem action='render' />"
-"		<menuitem action='preview' />"
-"		<menuitem action='sound' />"
-"		<separator name='bleh04'/>"
-"		<menuitem action='options' />"
-"		<menuitem action='close' />"
-"		<menuitem action='close-document' />"
-"		<menuitem action='quit' />"
-"	</menu>"
-"	<menu action='menu-edit'>"
-"		<menuitem action='undo'/>"
-"		<menuitem action='redo'/>"
-"		<separator name='bleh05'/>"
-"		<menuitem action='cut'/>"
-"		<menuitem action='copy'/>"
-"		<menuitem action='paste'/>"
-"		<separator name='bleh06'/>"
-"		<menuitem action='select-all-layers'/>"
-"		<menuitem action='unselect-all-layers'/>"
-"		<menuitem action='select-all-ducks'/>"
-"		<menuitem action='unselect-all-ducks'/>"
-"		<separator name='bleh07'/>"
-"		<menuitem action='properties'/>"
-"	</menu>"
-"	<menu action='menu-view'>"
-"		<menu action='menu-duck-mask'>"
-"			<menuitem action='mask-position-ducks' />"
-"			<menuitem action='mask-vertex-ducks' />"
-"			<menuitem action='mask-tangent-ducks' />"
-"			<menuitem action='mask-radius-ducks' />"
-"			<menuitem action='mask-width-ducks' />"
-"			<menuitem action='mask-angle-ducks' />"
-"			<menuitem action='mask-widthpoint-position-ducks' />"
-"		</menu>"
-"		<menu action='menu-preview-quality'>"
-"			<menuitem action='quality-00' />"
-"			<menuitem action='quality-01' />"
-"			<menuitem action='quality-02' />"
-"			<menuitem action='quality-03' />"
-"			<menuitem action='quality-04' />"
-"			<menuitem action='quality-05' />"
-"			<menuitem action='quality-06' />"
-"			<menuitem action='quality-07' />"
-"			<menuitem action='quality-08' />"
-"			<menuitem action='quality-09' />"
-"			<menuitem action='quality-10' />"
-"		</menu>"
-"		<menu action='menu-lowres-pixel'>"
-"		<menuitem action='decrease-low-res-pixel-size'/>"
-"		<menuitem action='increase-low-res-pixel-size'/>"
-"		<separator name='pixel-size-separator'/>"
-;
+	Glib::ustring ui_info =
+		"<ui>"
+		"	<popup name='menu-toolbox' action='menu-toolbox'>"
+		"	<menu action='menu-file'>"
+		"	</menu>"
+		"	</popup>"
+		"	<popup name='menu-main' action='menu-main'>"
+		"	<menu action='menu-file'>"
+		"		<menuitem action='new' />"
+		"		<menuitem action='open' />"
+		"		<menuitem action='save' />"
+		"		<menuitem action='save-as' />"
+		"		<menuitem action='revert' />"
+		"		<separator name='bleh01'/>"
+		"		<menuitem action='cvs-add' />"
+		"		<menuitem action='cvs-update' />"
+		"		<menuitem action='cvs-commit' />"
+		"		<menuitem action='cvs-revert' />"
+		"		<separator name='bleh02'/>"
+		"		<menuitem action='import' />"
+		"		<separator name='bleh03'/>"
+		"		<menuitem action='render' />"
+		"		<menuitem action='preview' />"
+		"		<menuitem action='sound' />"
+		"		<separator name='bleh04'/>"
+		"		<menuitem action='options' />"
+		"		<menuitem action='close' />"
+		"		<menuitem action='close-document' />"
+		"		<menuitem action='quit' />"
+		"	</menu>"
+		"	<menu action='menu-edit'>"
+		"		<menuitem action='undo'/>"
+		"		<menuitem action='redo'/>"
+		"		<separator name='bleh05'/>"
+		"		<menuitem action='cut'/>"
+		"		<menuitem action='copy'/>"
+		"		<menuitem action='paste'/>"
+		"		<separator name='bleh06'/>"
+		"		<menuitem action='select-all-layers'/>"
+		"		<menuitem action='unselect-all-layers'/>"
+		"		<menuitem action='select-all-ducks'/>"
+		"		<menuitem action='unselect-all-ducks'/>"
+		"		<separator name='bleh07'/>"
+		"		<menuitem action='properties'/>"
+		"	</menu>"
+		"	<menu action='menu-view'>"
+		"		<menu action='menu-duck-mask'>"
+		"			<menuitem action='mask-position-ducks' />"
+		"			<menuitem action='mask-vertex-ducks' />"
+		"			<menuitem action='mask-tangent-ducks' />"
+		"			<menuitem action='mask-radius-ducks' />"
+		"			<menuitem action='mask-width-ducks' />"
+		"			<menuitem action='mask-angle-ducks' />"
+		"			<menuitem action='mask-widthpoint-position-ducks' />"
+		"		</menu>"
+		"		<menu action='menu-preview-quality'>"
+		"			<menuitem action='quality-00' />"
+		"			<menuitem action='quality-01' />"
+		"			<menuitem action='quality-02' />"
+		"			<menuitem action='quality-03' />"
+		"			<menuitem action='quality-04' />"
+		"			<menuitem action='quality-05' />"
+		"			<menuitem action='quality-06' />"
+		"			<menuitem action='quality-07' />"
+		"			<menuitem action='quality-08' />"
+		"			<menuitem action='quality-09' />"
+		"			<menuitem action='quality-10' />"
+		"		</menu>"
+		"		<menu action='menu-lowres-pixel'>"
+		"		<menuitem action='decrease-low-res-pixel-size'/>"
+		"		<menuitem action='increase-low-res-pixel-size'/>"
+		"		<separator name='pixel-size-separator'/>";
 
-	for(list<int>::iterator iter = CanvasView::get_pixel_sizes().begin(); iter != CanvasView::get_pixel_sizes().end(); iter++)
-		ui_info += strprintf("			<menuitem action='lowres-pixel-%d' />", *iter);
+	for (list<int>::iterator iter = CanvasView::get_pixel_sizes().begin();
+			iter != CanvasView::get_pixel_sizes().end(); iter++)
+		ui_info += strprintf("<menuitem action='lowres-pixel-%d' />", *iter);
 
 	ui_info +=
-"		</menu>"
-"		<separator name='bleh08'/>"
-"		<menuitem action='play'/>"
-//"		<menuitem action='pause'/>"
-"		<menuitem action='stop'/>"
-"		<menuitem action='dialog-flipbook'/>"
-"		<separator name='bleh09'/>"
-"		<menuitem action='toggle-grid-show'/>"
-"		<menuitem action='toggle-grid-snap'/>"
-"		<menuitem action='toggle-guide-show'/>"
-"		<menuitem action='toggle-guide-snap'/>"
-"		<menuitem action='toggle-low-res'/>"
-"		<menuitem action='toggle-onion-skin'/>"
-"		<separator name='bleh10'/>"
-"		<menuitem action='canvas-zoom-in'/>"
-"		<menuitem action='canvas-zoom-out'/>"
-"		<menuitem action='canvas-zoom-fit'/>"
-"		<menuitem action='canvas-zoom-100'/>"
-"		<separator name='bleh11'/>"
-"		<menuitem action='time-zoom-in'/>"
-"		<menuitem action='time-zoom-out'/>"
-"		<separator name='bleh12'/>"
-"		<menuitem action='jump-next-keyframe'/>"
-"		<menuitem action='jump-prev-keyframe'/>"
-"		<menuitem action='seek-next-frame'/>"
-"		<menuitem action='seek-prev-frame'/>"
-"		<menuitem action='seek-next-second'/>"
-"		<menuitem action='seek-prev-second'/>"
-"		<menuitem action='seek-begin'/>"
-"		<menuitem action='seek-end'/>"
-"	</menu>"
-"	<menu action='menu-canvas'>"
-"		<menuitem action='canvas-new'/>"
-"	</menu>"
-"	<menu name='menu-state' action='menu-state'>"
-"	</menu>"
-"	<menu action='menu-group'>"
-"		<menuitem action='action-group_add'/>"
-"	</menu>"
-"	<menu action='menu-layer'>"
-//"		<menuitem action='cut'/>"
-//"		<menuitem action='copy'/>"
-//"		<menuitem action='paste'/>"
-//"		<separator name='bleh06'/>"
-"		<menu action='menu-layer-new'></menu>"
-"		<menuitem action='amount-inc'/>"
-"		<menuitem action='amount-dec'/>"
-"	</menu>"
-"	<menu action='menu-keyframe'>"
-"		<menuitem action='keyframe-properties'/>"
-"	</menu>"
-"	</popup>"
+		"		</menu>"
+		"		<separator name='bleh08'/>"
+		"		<menuitem action='play'/>"
+		// "	<menuitem action='pause'/>"
+		"		<menuitem action='stop'/>"
+		"		<menuitem action='dialog-flipbook'/>"
+		"		<separator name='bleh09'/>"
+		"		<menuitem action='toggle-grid-show'/>"
+		"		<menuitem action='toggle-grid-snap'/>"
+		"		<menuitem action='toggle-guide-show'/>"
+		"		<menuitem action='toggle-guide-snap'/>"
+		"		<menuitem action='toggle-low-res'/>"
+		"		<menuitem action='toggle-onion-skin'/>"
+		"		<separator name='bleh10'/>"
+		"		<menuitem action='canvas-zoom-in'/>"
+		"		<menuitem action='canvas-zoom-out'/>"
+		"		<menuitem action='canvas-zoom-fit'/>"
+		"		<menuitem action='canvas-zoom-100'/>"
+		"		<separator name='bleh11'/>"
+		"		<menuitem action='time-zoom-in'/>"
+		"		<menuitem action='time-zoom-out'/>"
+		"		<separator name='bleh12'/>"
+		"		<menuitem action='jump-next-keyframe'/>"
+		"		<menuitem action='jump-prev-keyframe'/>"
+		"		<menuitem action='seek-next-frame'/>"
+		"		<menuitem action='seek-prev-frame'/>"
+		"		<menuitem action='seek-next-second'/>"
+		"		<menuitem action='seek-prev-second'/>"
+		"		<menuitem action='seek-begin'/>"
+		"		<menuitem action='seek-end'/>"
+		"	</menu>"
+		"	<menu action='menu-canvas'>"
+		"		<menuitem action='canvas-new'/>"
+		"	</menu>"
+		"	<menu name='menu-state' action='menu-state'>"
+		"	</menu>"
+		"	<menu action='menu-group'>"
+		"		<menuitem action='action-group_add'/>"
+		"	</menu>"
+		"	<menu action='menu-layer'>"
+		//"		<menuitem action='cut'/>"
+		//"		<menuitem action='copy'/>"
+		//"		<menuitem action='paste'/>"
+		//"		<separator name='bleh06'/>"
+		"		<menu action='menu-layer-new'></menu>"
+		"		<menuitem action='amount-inc'/>"
+		"		<menuitem action='amount-dec'/>"
+		"	</menu>"
+		"	<menu action='menu-keyframe'>"
+		"		<menuitem action='keyframe-properties'/>"
+		"	</menu>"
+		"	</popup>"
+		"</ui>";
 
-"</ui>"
-;
-/*		"<ui>"
-        "  <menubar name='MenuBar'>"
-        "    <menu action='MenuFile'>"
-        "      <menuitem action='New'/>"
-        "      <menuitem action='Open'/>"
-        "      <separator/>"
-        "      <menuitem action='Quit'/>"
-        "    </menu>"
-        "    <menu action='MenuEdit'>"
-        "      <menuitem action='Cut'/>"
-        "      <menuitem action='Copy'/>"
-        "      <menuitem action='Paste'/>"
-        "    </menu>"
-        "  </menubar>"
-        "  <toolbar  name='ToolBar'>"
-        "    <toolitem action='Open'/>"
-        "    <toolitem action='Quit'/>"
-        "  </toolbar>"
-        "</ui>";
-*/
 	try
 	{
 		actions_action_group->set_sensitive(false);
 		App::ui_manager()->set_add_tearoffs(true);
-		App::ui_manager()->insert_action_group(menus_action_group,1);
-		App::ui_manager()->insert_action_group(actions_action_group,1);
+		App::ui_manager()->insert_action_group(menus_action_group, 1);
+		App::ui_manager()->insert_action_group(actions_action_group, 1);
 		App::ui_manager()->add_ui_from_string(ui_info);
 
-		//App::ui_manager()->get_accel_group()->unlock();
+		// App::ui_manager()->get_accel_group()->unlock();
 	}
+
 	catch(const Glib::Error& ex)
 	{
 		synfig::error("building menus and toolbars failed: " + ex.what());
@@ -1059,80 +1042,99 @@ init_ui_manager()
 	}
 
 	// the toolbox
-	ACCEL("<Mod1>a",													"<Actions>/action_group_state_manager/state-normal"					);
-	ACCEL("<Mod1>v",													"<Actions>/action_group_state_manager/state-smooth_move"				);
-	ACCEL("<Mod1>s",													"<Actions>/action_group_state_manager/state-scale"					);
-	ACCEL("<Mod1>t",													"<Actions>/action_group_state_manager/state-rotate"					);
-	ACCEL("<Mod1>m",													"<Actions>/action_group_state_manager/state-mirror"					);
-	ACCEL("<Mod1>c",													"<Actions>/action_group_state_manager/state-circle"					);
-	ACCEL("<Mod1>r",													"<Actions>/action_group_state_manager/state-rectangle"				);
-	ACCEL("<Mod1>q",													"<Actions>/action_group_state_manager/state-star"						);
-	ACCEL("<Mod1>g",													"<Actions>/action_group_state_manager/state-gradient"					);
-	ACCEL("<Mod1>p",													"<Actions>/action_group_state_manager/state-polygon"					);
-	ACCEL("<Mod1>b",													"<Actions>/action_group_state_manager/state-bline"					);
-	ACCEL("<Mod1>x",													"<Actions>/action_group_state_manager/state-text"						);
-	ACCEL("<Mod1>f",													"<Actions>/action_group_state_manager/state-fill"						);
-	ACCEL("<Mod1>e",													"<Actions>/action_group_state_manager/state-eyedrop"					);
-	ACCEL("<Mod1>z",													"<Actions>/action_group_state_manager/state-zoom"						);
-	ACCEL("<Mod1>d",													"<Actions>/action_group_state_manager/state-draw"						);
-	ACCEL("<Mod1>k",													"<Actions>/action_group_state_manager/state-sketch"					);
-	ACCEL("<Mod1>w",													"<Actions>/action_group_state_manager/state-width"					);
+	ACCEL("<Mod1>a", "<Actions>/action_group_state_manager/state-normal");
+	ACCEL("<Mod1>v", "<Actions>/action_group_state_manager/state-smooth_move");
+	ACCEL("<Mod1>s", "<Actions>/action_group_state_manager/state-scale");
+	ACCEL("<Mod1>t", "<Actions>/action_group_state_manager/state-rotate");
+	ACCEL("<Mod1>m", "<Actions>/action_group_state_manager/state-mirror");
+	ACCEL("<Mod1>c", "<Actions>/action_group_state_manager/state-circle");
+	ACCEL("<Mod1>r", "<Actions>/action_group_state_manager/state-rectangle");
+	ACCEL("<Mod1>q", "<Actions>/action_group_state_manager/state-star");
+	ACCEL("<Mod1>g", "<Actions>/action_group_state_manager/state-gradient");
+	ACCEL("<Mod1>p", "<Actions>/action_group_state_manager/state-polygon");
+	ACCEL("<Mod1>b", "<Actions>/action_group_state_manager/state-bline");
+	ACCEL("<Mod1>x", "<Actions>/action_group_state_manager/state-text");
+	ACCEL("<Mod1>f", "<Actions>/action_group_state_manager/state-fill");
+	ACCEL("<Mod1>e", "<Actions>/action_group_state_manager/state-eyedrop");
+	ACCEL("<Mod1>z", "<Actions>/action_group_state_manager/state-zoom");
+	ACCEL("<Mod1>d", "<Actions>/action_group_state_manager/state-draw");
+	ACCEL("<Mod1>k", "<Actions>/action_group_state_manager/state-sketch");
+	ACCEL("<Mod1>w", "<Actions>/action_group_state_manager/state-width");
 
 	// everything else
-	ACCEL("<Control>a",													"<Actions>/canvasview/select-all-ducks"				);
-	ACCEL("<Control>d",													"<Actions>/canvasview/unselect-all-ducks"				);
-	ACCEL("<Control><Shift>a",											"<Actions>/canvasview/select-all-layers"				);
-	ACCEL("<Control><Shift>d",											"<Actions>/canvasview/unselect-all-layers"			);
-	ACCEL("F9",															"<Actions>/canvasview/render"							);
-	ACCEL("F11",														"<Actions>/canvasview/preview"						);
-	ACCEL("F8",															"<Actions>/canvasview/properties"						);
-	ACCEL("F12",														"<Actions>/canvasview/options"						);
-	ACCEL("<control>i",													"<Actions>/canvasview/import"							);
-	ACCEL2(Gtk::AccelKey(GDK_Escape,static_cast<Gdk::ModifierType>(0),	"<Actions>/canvasview/stop"							));
-	ACCEL("<Control>g",													"<Actions>/canvasview/toggle-grid-show"				);
-	ACCEL("<Control>l",													"<Actions>/canvasview/toggle-grid-snap"				);
-	ACCEL2(Gtk::AccelKey('`',Gdk::CONTROL_MASK,							"<Actions>/canvasview/toggle-low-res"					));
-	ACCEL("<Mod1>1",													"<Actions>/canvasview/mask-position-ducks"			);
-	ACCEL("<Mod1>2",													"<Actions>/canvasview/mask-vertex-ducks"				);
-	ACCEL("<Mod1>3",													"<Actions>/canvasview/mask-tangent-ducks"				);
-	ACCEL("<Mod1>4",													"<Actions>/canvasview/mask-radius-ducks"				);
-	ACCEL("<Mod1>5",													"<Actions>/canvasview/mask-width-ducks"				);
-	ACCEL("<Mod1>6",													"<Actions>/canvasview/mask-angle-ducks"				);
-	ACCEL("<Mod1>5",													"<Actions>/canvasview/mask-widthpoint-position-ducks"				);
-	ACCEL2(Gtk::AccelKey(GDK_Page_Up,Gdk::SHIFT_MASK,					"<Actions>/action_group_layer_action_manager/action-LayerRaise"				));
-	ACCEL2(Gtk::AccelKey(GDK_Page_Down,Gdk::SHIFT_MASK,					"<Actions>/action_group_layer_action_manager/action-LayerLower"				));
-	ACCEL("<Control>1",													"<Actions>/canvasview/quality-01"						);
-	ACCEL("<Control>2",													"<Actions>/canvasview/quality-02"						);
-	ACCEL("<Control>3",													"<Actions>/canvasview/quality-03"						);
-	ACCEL("<Control>4",													"<Actions>/canvasview/quality-04"						);
-	ACCEL("<Control>5",													"<Actions>/canvasview/quality-05"						);
-	ACCEL("<Control>6",													"<Actions>/canvasview/quality-06"						);
-	ACCEL("<Control>7",													"<Actions>/canvasview/quality-07"						);
-	ACCEL("<Control>8",													"<Actions>/canvasview/quality-08"						);
-	ACCEL("<Control>9",													"<Actions>/canvasview/quality-09"						);
-	ACCEL("<Control>0",													"<Actions>/canvasview/quality-10"						);
-	ACCEL("<Control>z",													"<Actions>/action_group_dock_history/undo"							);
-	ACCEL("<Control>r",													"<Actions>/action_group_dock_history/redo"							);
-	ACCEL2(Gtk::AccelKey(GDK_Delete,Gdk::CONTROL_MASK,					"<Actions>/action_group_layer_action_manager/action-LayerRemove"				));
-	ACCEL2(Gtk::AccelKey('(',Gdk::CONTROL_MASK,							"<Actions>/canvasview/decrease-low-res-pixel-size"	));
-	ACCEL2(Gtk::AccelKey(')',Gdk::CONTROL_MASK,							"<Actions>/canvasview/increase-low-res-pixel-size"	));
-	ACCEL2(Gtk::AccelKey('(',Gdk::MOD1_MASK|Gdk::CONTROL_MASK,			"<Actions>/action_group_layer_action_manager/amount-dec"						));
-	ACCEL2(Gtk::AccelKey(')',Gdk::MOD1_MASK|Gdk::CONTROL_MASK,			"<Actions>/action_group_layer_action_manager/amount-inc"						));
-	ACCEL2(Gtk::AccelKey(']',Gdk::CONTROL_MASK,							"<Actions>/canvasview/jump-next-keyframe"				));
-	ACCEL2(Gtk::AccelKey('[',Gdk::CONTROL_MASK,							"<Actions>/canvasview/jump-prev-keyframe"				));
-	ACCEL2(Gtk::AccelKey('=',Gdk::CONTROL_MASK,							"<Actions>/canvasview/canvas-zoom-in"					));
-	ACCEL2(Gtk::AccelKey('-',Gdk::CONTROL_MASK,							"<Actions>/canvasview/canvas-zoom-out"				));
-	ACCEL2(Gtk::AccelKey('+',Gdk::CONTROL_MASK,							"<Actions>/canvasview/time-zoom-in"					));
-	ACCEL2(Gtk::AccelKey('_',Gdk::CONTROL_MASK,							"<Actions>/canvasview/time-zoom-out"					));
-	ACCEL2(Gtk::AccelKey('.',Gdk::CONTROL_MASK,							"<Actions>/canvasview/seek-next-frame"				));
-	ACCEL2(Gtk::AccelKey(',',Gdk::CONTROL_MASK,							"<Actions>/canvasview/seek-prev-frame"				));
-	ACCEL2(Gtk::AccelKey('>',Gdk::CONTROL_MASK,							"<Actions>/canvasview/seek-next-second"				));
-	ACCEL2(Gtk::AccelKey('<',Gdk::CONTROL_MASK,							"<Actions>/canvasview/seek-prev-second"				));
-	ACCEL("<Mod1>o",													"<Actions>/canvasview/toggle-onion-skin"				);
-	ACCEL("<Control><Shift>z",											"<Actions>/canvasview/canvas-zoom-fit"				);
-	ACCEL("<Control>p",													"<Actions>/canvasview/play"							);
-	ACCEL("Home",														"<Actions>/canvasview/seek-begin"						);
-	ACCEL("End",														"<Actions>/canvasview/seek-end"						);
+	ACCEL("<Control>a",	"<Actions>/canvasview/select-all-ducks");
+	ACCEL("<Control>d",	"<Actions>/canvasview/unselect-all-ducks");
+	ACCEL("<Control><Shift>a","<Actions>/canvasview/select-all-layers");
+	ACCEL("<Control><Shift>d","<Actions>/canvasview/unselect-all-layers");
+	ACCEL("F9",	"<Actions>/canvasview/render");
+	ACCEL("F11", "<Actions>/canvasview/preview");
+	ACCEL("F8",	"<Actions>/canvasview/properties");
+	ACCEL("F12", "<Actions>/canvasview/options");
+	ACCEL("<control>i", "<Actions>/canvasview/import");
+	ACCEL2(Gtk::AccelKey(GDK_Escape, static_cast<Gdk::ModifierType>(0),
+			"<Actions>/canvasview/stop"));
+	ACCEL("<Control>g",	"<Actions>/canvasview/toggle-grid-show");
+	ACCEL("<Control>l",	"<Actions>/canvasview/toggle-grid-snap");
+	ACCEL2(Gtk::AccelKey('`', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/toggle-low-res"));
+	ACCEL("<Mod1>1", "<Actions>/canvasview/mask-position-ducks");
+	ACCEL("<Mod1>2", "<Actions>/canvasview/mask-vertex-ducks");
+	ACCEL("<Mod1>3", "<Actions>/canvasview/mask-tangent-ducks");
+	ACCEL("<Mod1>4", "<Actions>/canvasview/mask-radius-ducks");
+	ACCEL("<Mod1>5", "<Actions>/canvasview/mask-width-ducks");
+	ACCEL("<Mod1>6", "<Actions>/canvasview/mask-angle-ducks");
+	ACCEL("<Mod1>5", "<Actions>/canvasview/mask-widthpoint-position-ducks");
+	ACCEL2(Gtk::AccelKey(GDK_Page_Up, Gdk::SHIFT_MASK,
+			"<Actions>/action_group_layer_action_manager/action-LayerRaise"));
+	ACCEL2(Gtk::AccelKey(GDK_Page_Down, Gdk::SHIFT_MASK,
+			"<Actions>/action_group_layer_action_manager/action-LayerLower"));
+	ACCEL("<Control>1",	"<Actions>/canvasview/quality-01");
+	ACCEL("<Control>2",	"<Actions>/canvasview/quality-02");
+	ACCEL("<Control>3",	"<Actions>/canvasview/quality-03");
+	ACCEL("<Control>4",	"<Actions>/canvasview/quality-04");
+	ACCEL("<Control>5",	"<Actions>/canvasview/quality-05");
+	ACCEL("<Control>6",	"<Actions>/canvasview/quality-06");
+	ACCEL("<Control>7",	"<Actions>/canvasview/quality-07");
+	ACCEL("<Control>8",	"<Actions>/canvasview/quality-08");
+	ACCEL("<Control>9",	"<Actions>/canvasview/quality-09");
+	ACCEL("<Control>0",	"<Actions>/canvasview/quality-10");
+	ACCEL("<Control>z",	"<Actions>/action_group_dock_history/undo");
+	ACCEL("<Control>r",	"<Actions>/action_group_dock_history/redo");
+	ACCEL2(Gtk::AccelKey(GDK_Delete,Gdk::CONTROL_MASK,
+			"<Actions>/action_group_layer_action_manager/action-LayerRemove"));
+	ACCEL2(Gtk::AccelKey('(', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/decrease-low-res-pixel-size"));
+	ACCEL2(Gtk::AccelKey(')', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/increase-low-res-pixel-size"));
+	ACCEL2(Gtk::AccelKey('(', Gdk::MOD1_MASK|Gdk::CONTROL_MASK,
+			"<Actions>/action_group_layer_action_manager/amount-dec"));
+	ACCEL2(Gtk::AccelKey(')', Gdk::MOD1_MASK|Gdk::CONTROL_MASK,
+			"<Actions>/action_group_layer_action_manager/amount-inc"));
+	ACCEL2(Gtk::AccelKey(']', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/jump-next-keyframe"));
+	ACCEL2(Gtk::AccelKey('[', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/jump-prev-keyframe"));
+	ACCEL2(Gtk::AccelKey('=', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/canvas-zoom-in"));
+	ACCEL2(Gtk::AccelKey('-', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/canvas-zoom-out"));
+	ACCEL2(Gtk::AccelKey('+', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/time-zoom-in"));
+	ACCEL2(Gtk::AccelKey('_', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/time-zoom-out"));
+	ACCEL2(Gtk::AccelKey('.', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/seek-next-frame"));
+	ACCEL2(Gtk::AccelKey(',', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/seek-prev-frame"));
+	ACCEL2(Gtk::AccelKey('>', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/seek-next-second"));
+	ACCEL2(Gtk::AccelKey('<', Gdk::CONTROL_MASK,
+			"<Actions>/canvasview/seek-prev-second"));
+	ACCEL("<Mod1>o", "<Actions>/canvasview/toggle-onion-skin");
+	ACCEL("<Control><Shift>z", "<Actions>/canvasview/canvas-zoom-fit");
+	ACCEL("<Control>p", "<Actions>/canvasview/play");
+	ACCEL("Home", "<Actions>/canvasview/seek-begin");
+	ACCEL("End", "<Actions>/canvasview/seek-end");
 
 #undef ACCEL
 #undef ACCEL2
