@@ -414,7 +414,7 @@ private:
 	Gtk::Widget* create_status_bar();
 
 	//! Constructor Helper - Initializes all of the menus
-	void init_menus();
+	//void init_menus();
 
 	bool duck_change_param(const synfig::Point &value,synfig::Layer::Handle layer, synfig::String param_name);
 
