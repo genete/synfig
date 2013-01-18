@@ -783,22 +783,36 @@ init_ui_manager()
 		));
 	}
 
-#define DEFINE_ACTION(x,stock) { Glib::RefPtr<Gtk::Action> action( Gtk::Action::create(x, stock) ); actions_action_group->add(action); }
-#define DEFINE_ACTION2(x,stock,label) { Glib::RefPtr<Gtk::Action> action( Gtk::Action::create(x, stock,label,label) ); actions_action_group->add(action); }
-#define DEFINE_ACTION_SIG(group,x,stock,sig) { Glib::RefPtr<Gtk::Action> action( Gtk::Action::create(x, stock) ); group->add(action,sig); }
+#define DEFINE_ACTION(x, stock) {\
+	Glib::RefPtr<Gtk::Action> action(\
+	Gtk::Action::create(x, Gtk::StockID(stock)));\
+	actions_action_group->add(action);\
+	}
 
-	DEFINE_ACTION2("keyframe-properties", Gtk::StockID("gtk-properties"),
+#define DEFINE_ACTION2(x, stock, label) {\
+	Glib::RefPtr<Gtk::Action> action(\
+	Gtk::Action::create(x, Gtk::StockID(stock), label, label) );\
+	actions_action_group->add(action);\
+	}
+
+#define DEFINE_ACTION_SIG(group, x, stock, sig) {\
+	Glib::RefPtr<Gtk::Action> action(\
+	Gtk::Action::create(x, stock) );\
+	group->add(action, sig);\
+	}
+
+	DEFINE_ACTION2("keyframe-properties", "gtk-properties",
 			_("Keyframe Properties"));
-	DEFINE_ACTION("about", Gtk::StockID("synfig-about"));
+	DEFINE_ACTION("about", "synfig-about");
 	DEFINE_ACTION("new", Gtk::Stock::NEW);
 	DEFINE_ACTION("open", Gtk::Stock::OPEN);
 	DEFINE_ACTION("save", Gtk::Stock::SAVE);
 	DEFINE_ACTION("save-as", Gtk::Stock::SAVE_AS);
 	DEFINE_ACTION("revert", Gtk::Stock::REVERT_TO_SAVED);
-	DEFINE_ACTION("cvs-add", Gtk::StockID("synfig-cvs_add"));
-	DEFINE_ACTION("cvs-update", Gtk::StockID("synfig-cvs_update"));
-	DEFINE_ACTION("cvs-commit", Gtk::StockID("synfig-cvs_commit"));
-	DEFINE_ACTION("cvs-revert", Gtk::StockID("synfig-cvs_revert"));
+	DEFINE_ACTION("cvs-add", "synfig-cvs_add");
+	DEFINE_ACTION("cvs-update", "synfig-cvs_update");
+	DEFINE_ACTION("cvs-commit", "synfig-cvs_commit");
+	DEFINE_ACTION("cvs-revert", "synfig-cvs_revert");
 	DEFINE_ACTION("import", _("Import"));
 	DEFINE_ACTION("render", _("Render"));
 	DEFINE_ACTION("preview", _("Preview"));
@@ -810,11 +824,11 @@ init_ui_manager()
 	DEFINE_ACTION("quit", Gtk::Stock::QUIT);
 
 
-	DEFINE_ACTION("undo", Gtk::StockID("gtk-undo"));
-	DEFINE_ACTION("redo", Gtk::StockID("gtk-redo"));
-	DEFINE_ACTION("cut", Gtk::StockID("gtk-cut"));
-	DEFINE_ACTION("copy", Gtk::StockID("gtk-copy"));
-	DEFINE_ACTION("paste", Gtk::StockID("gtk-paste"));
+	DEFINE_ACTION("undo", "gtk-undo");
+	DEFINE_ACTION("redo", "gtk-redo");
+	DEFINE_ACTION("cut", "gtk-cut");
+	DEFINE_ACTION("copy", "gtk-copy");
+	DEFINE_ACTION("paste", "gtk-paste");
 	DEFINE_ACTION("select-all-ducks", _("Select All Ducks"));
 	DEFINE_ACTION("unselect-all-ducks", _("Unselect All Ducks"));
 	DEFINE_ACTION("select-all-layers", _("Select All Layers"));
@@ -857,12 +871,12 @@ init_ui_manager()
 	DEFINE_ACTION("increase-low-res-pixel-size",
 		_("Increase Low-Res Pixel Size"));
 	DEFINE_ACTION("toggle-onion-skin", _("Toggle Onion Skin"));
-	DEFINE_ACTION("canvas-zoom-in", Gtk::StockID("gtk-zoom-in"));
-	DEFINE_ACTION("canvas-zoom-out", Gtk::StockID("gtk-zoom-out"));
-	DEFINE_ACTION("canvas-zoom-fit", Gtk::StockID("gtk-zoom-fit"));
-	DEFINE_ACTION("canvas-zoom-100", Gtk::StockID("gtk-zoom-100"));
-	DEFINE_ACTION("time-zoom-in", Gtk::StockID("gtk-zoom-in"));
-	DEFINE_ACTION("time-zoom-out", Gtk::StockID("gtk-zoom-out"));
+	DEFINE_ACTION("canvas-zoom-in", "gtk-zoom-in");
+	DEFINE_ACTION("canvas-zoom-out", "gtk-zoom-out");
+	DEFINE_ACTION("canvas-zoom-fit", "gtk-zoom-fit");
+	DEFINE_ACTION("canvas-zoom-100", "gtk-zoom-100");
+	DEFINE_ACTION("time-zoom-in", "gtk-zoom-in");
+	DEFINE_ACTION("time-zoom-out", "gtk-zoom-out");
 	DEFINE_ACTION("jump-next-keyframe", _("Jump to Next Keyframe"));
 	DEFINE_ACTION("jump-prev-keyframe", _("Jump to Prev Keyframe"));
 	DEFINE_ACTION("seek-next-frame", _("Next Frame"));
