@@ -1600,7 +1600,7 @@ CanvasView::init_menus()
 		sigc::mem_fun(*this, &studio::CanvasView::on_play_pause_pressed)
 	);
 
-	action_group->add( Gtk::Action::create("dialog-flipbook", _("Preview Window")),
+	action_group->add( Gtk::Action::create("dialog-flipbook", Gtk::StockID("synfig-preview_options"), _("Preview Window")),
 		sigc::mem_fun0(*preview_dialog, &studio::Dialog_Preview::present)
 	);
 
