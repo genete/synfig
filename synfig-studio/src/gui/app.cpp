@@ -804,7 +804,9 @@ init_ui_manager()
 	DEFINE_ACTION2("keyframe-properties", "gtk-properties",
 			_("Keyframe Properties"));
 	DEFINE_ACTION("about", "synfig-about");
-	DEFINE_ACTION("new", Gtk::Stock::NEW);
+	DEFINE_ACTION_SIG(menus_action_group, "new", Gtk::Stock::NEW,
+		sigc::hide_return(sigc::ptr_fun(&studio::App::new_instance))
+	);
 	DEFINE_ACTION("open", Gtk::Stock::OPEN);
 	DEFINE_ACTION("save", Gtk::Stock::SAVE);
 	DEFINE_ACTION("save-as", Gtk::Stock::SAVE_AS);
