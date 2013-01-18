@@ -1417,9 +1417,9 @@ CanvasView::on_current_time_widget_changed()
 //		return layer_tree;
 //	}
 
-void
-CanvasView::init_menus()
-{
+//void
+//CanvasView::init_menus()
+//{
 /*
 	mainmenu.set_accel_group(get_accel_group());
 	mainmenu.set_accel_path("<Canvas-view>");
@@ -1444,7 +1444,7 @@ CanvasView::init_menus()
 	- canvasmenu
 	- viewmenu
 	*/
-	action_group = Gtk::ActionGroup::create("canvasview");
+/*	action_group = Gtk::ActionGroup::create("canvasview");
 
 	//action_group->add( Gtk::Action::create("MenuFile", _("_File")) );
 	action_group->add( Gtk::Action::create("new", Gtk::Stock::NEW),
@@ -1703,7 +1703,7 @@ CanvasView::init_menus()
 
 	add_accel_group(App::ui_manager()->get_accel_group());
 
-/*	// Here is where we add the actions that may have conflicting
+	// Here is where we add the actions that may have conflicting
 	// keyboard accelerators.
 	{
 		Glib::RefPtr<Gtk::ActionGroup> accel_action_group(Gtk::ActionGroup::create("canvas_view"));
@@ -1756,7 +1756,7 @@ CanvasView::init_menus()
 		set_ref_obj("accel_ui_manager",accel_ui_manager);
 		set_ref_obj("accel_action_group",accel_action_group);
 	}
-*/
+
 
 #if 0
 //
@@ -2002,8 +2002,9 @@ CanvasView::init_menus()
 //	canvasmenu.set_accel_path("<synfig>/Canvas");
 //	viewmenu.set_accel_path("<synfig>/View");
 //	duckmaskmenu.set_accel_path("<synfig>/DuckMask");
-#endif
-}
+//#endif
+//}
+
 
 void
 CanvasView::on_select_layers()
