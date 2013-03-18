@@ -190,8 +190,25 @@ Layer_Composite::accelerated_cairorender(Context context,cairo_surface_t *surfac
 	// blend method of surface layer
 	image.push_front(const_cast<synfig::Layer_Composite*>(this));		
 
+	if(1)
+	{// Set up a cairo image target
+		Target_Cairo::Handle target(cairo_image_target(&surface));
+	
+		if(!target)
+		{
+			if(cb)cb->error(_("Unable to create surface target"));
+			return false;
+		}
+	
+		RendDesc desc(renddesc);
+		
+		target->set_rend_desc(&desc);
+		// Render the scene
+		return cairorender(Context(image.begin()),target,desc,&stagetwo);
+	}
 	// Render the scene
 	return cairorender(Context(image.begin()),surface,renddesc,&stagetwo);
+
 }
 
 
