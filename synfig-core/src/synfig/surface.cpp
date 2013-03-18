@@ -79,14 +79,20 @@ target2cairo_image::set_rend_desc(synfig::RendDesc *newdesc)
 bool
 target2cairo_image::obtain_surface(cairo_surface_t*& s)
 {
-	int sw=cairo_image_surface_get_width(*image);
-	int sh=cairo_image_surface_get_height(*image);
 	int w=desc.get_w(), h=desc.get_h();
-	
-	if(sw!=w || sh!=h)
+	if(!*image)
 	{
-		cairo_surface_destroy(*image);
 		*image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+	}
+	else
+	{
+		int sw=cairo_image_surface_get_width(*image);
+		int sh=cairo_image_surface_get_height(*image);
+		if(sw!=w || sh!=h)
+		{
+			cairo_surface_destroy(*image);
+			*image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+		}
 	}
 	s=cairo_surface_reference(*image);
 	return true;
