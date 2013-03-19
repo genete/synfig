@@ -53,19 +53,21 @@ using namespace etl;
 class target2cairo_image: public synfig::Target_Cairo
 {
 public:
-	cairo_surface_t** image;
-	target2cairo_image(cairo_surface_t ** s);
+	cairo_surface_t* image;
+	target2cairo_image(cairo_surface_t * s);
 	virtual ~target2cairo_image();
 	virtual bool set_rend_desc(synfig::RendDesc *newdesc);
 	virtual bool obtain_surface(cairo_surface_t*& s);
 };
 
-target2cairo_image::target2cairo_image(cairo_surface_t ** s):image(s)
+target2cairo_image::target2cairo_image(cairo_surface_t * s):
+image(cairo_surface_reference(s))
 {
 }
 
 target2cairo_image::~target2cairo_image()
 {
+	cairo_surface_destroy(image);
 }
 
 bool
@@ -80,21 +82,21 @@ bool
 target2cairo_image::obtain_surface(cairo_surface_t*& s)
 {
 	int w=desc.get_w(), h=desc.get_h();
-	if(!*image)
+	if(!image)
 	{
-		*image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+		image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
 	}
 	else
 	{
-		int sw=cairo_image_surface_get_width(*image);
-		int sh=cairo_image_surface_get_height(*image);
+		int sw=cairo_image_surface_get_width(image);
+		int sh=cairo_image_surface_get_height(image);
 		if(sw!=w || sh!=h)
 		{
-			cairo_surface_destroy(*image);
-			*image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+			cairo_surface_destroy(image);
+			image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
 		}
 	}
-	s=cairo_surface_reference(*image);
+	s=cairo_surface_reference(image);
 	return true;
 }
 
@@ -176,7 +178,7 @@ synfig::surface_target(Surface *surface)
 
 
 Target_Cairo::Handle
-synfig::cairo_image_target(cairo_surface_t **surface)
+synfig::cairo_image_target(cairo_surface_t *surface)
 {
 	return Target_Cairo::Handle(new target2cairo_image(surface));
 }

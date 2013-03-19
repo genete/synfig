@@ -192,7 +192,7 @@ Layer_Composite::accelerated_cairorender(Context context,cairo_surface_t *surfac
 
 	if(1)
 	{// Set up a cairo image target
-		Target_Cairo::Handle target(cairo_image_target(&surface));
+		Target_Cairo::Handle target(cairo_image_target(surface));
 	
 		if(!target)
 		{
