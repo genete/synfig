@@ -61,13 +61,14 @@ public:
 };
 
 target2cairo_image::target2cairo_image(cairo_surface_t * s):
-image(cairo_surface_reference(s))
+image(s?cairo_surface_reference(s):NULL)
 {
 }
 
 target2cairo_image::~target2cairo_image()
 {
-	cairo_surface_destroy(image);
+	if(image)
+		cairo_surface_destroy(image);
 }
 
 bool
