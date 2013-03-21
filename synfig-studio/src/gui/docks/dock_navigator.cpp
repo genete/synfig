@@ -354,7 +354,7 @@ bool studio::Widget_NavView::on_expose_draw(GdkEventExpose */*exp*/)
 			cr->paint();
 			cr->restore();
 		}
-		if(studio::App::navigator_uses_cairo)
+		if(studio::App::navigator_uses_cairo && cairo_surface && !cairo_surface_is_mapped(cairo_surface))
 		{
 			cr->save();
 			cr->scale(sx, sx);
