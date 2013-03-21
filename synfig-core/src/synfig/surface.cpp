@@ -500,6 +500,7 @@ CairoSurface::map_cairo_image()
 			int h(cairo_image_surface_get_height(cs_image_));
 			int stride(cairo_image_surface_get_stride(cs_image_));
 			set_wh(w, h, data, stride);
+			cairo_surface_mark_as_mapped(cs_);
 			return true;
 		}
 		return false;	
@@ -519,6 +520,7 @@ CairoSurface::unmap_cairo_image()
 		// this will destroy cs_image_
 		cairo_surface_unmap_image(cs_, cs_image_);
 		cs_image_=NULL;
+		cairo_surface_mark_as_unmapped(cs_);
 #else
 		assert(false); // Old versions of cairo are not supported
 #endif
@@ -527,6 +529,7 @@ CairoSurface::unmap_cairo_image()
 	{
 		cairo_surface_destroy(cs_image_);
 		cs_image_ = NULL;
+		cairo_surface_mark_as_unmapped(cs_);
 	}
 }
 
