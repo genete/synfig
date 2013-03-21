@@ -137,6 +137,11 @@ class CairoSurface : public etl::surface<CairoColor, CairoColorAccumulator, Cair
 	cairo_surface_t *cs_image_;
 	
 public:
+	static bool mapped;
+	static bool unmapped;
+	static const cairo_user_data_key_t mapped_key;
+	static const cairo_user_data_key_t unmapped_key;
+
 	typedef CairoColor value_type;
 	class alpha_pen;
 	
@@ -268,6 +273,10 @@ public:
 etl::handle<Target_Scanline> surface_target(Surface *surface);
 //!Creates a target that will render to a cairo_surface_t image surface
 etl::handle<Target_Cairo> cairo_image_target(cairo_surface_t* surface);
+// Functions to mark as mapped or unmapped and to retrieve the mapped status
+bool cairo_surface_mark_as_mapped(cairo_surface_t* surface);
+bool cairo_surface_mark_as_unmapped(cairo_surface_t* surface);
+bool cairo_surface_is_mapped(cairo_surface_t* surface);
 
 }; // END of namespace synfig
 

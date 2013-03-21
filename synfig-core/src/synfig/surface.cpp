@@ -50,6 +50,12 @@ using namespace etl;
 /* === M A C R O S ========================================================= */
 
 /* === G L O B A L S ======================================================= */
+
+bool CairoSurface::mapped;
+bool CairoSurface::unmapped;
+const cairo_user_data_key_t CairoSurface::mapped_key=cairo_user_data_key_t();
+const cairo_user_data_key_t CairoSurface::unmapped_key=cairo_user_data_key_t();
+
 class target2cairo_image: public synfig::Target_Cairo
 {
 public:
@@ -170,6 +176,57 @@ target2surface::end_scanline()
 /* === P R O C E D U R E S ================================================= */
 
 /* === M E T H O D S ======================================================= */
+bool
+synfig::cairo_surface_is_mapped(cairo_surface_t* surface)
+{
+	if(surface)
+		return (cairo_surface_get_user_data(surface, &CairoSurface::mapped_key) == &CairoSurface::mapped);
+	return false;
+}
+
+bool
+synfig::cairo_surface_mark_as_mapped(cairo_surface_t* surface)
+{
+	if(!surface)
+		return false;
+	
+	cairo_status_t status;
+	status = cairo_surface_set_user_data (surface, &CairoSurface::unmapped_key, NULL, NULL);
+	if(status)
+	{
+		synfig::error("Cairo surface: Can't unset unmapped status");
+		return false;
+	}
+	status = cairo_surface_set_user_data (surface, &CairoSurface::mapped_key, &CairoSurface::mapped, NULL);
+	if(status)
+	{
+		synfig::error("Cairo surface: Can't set mapped status");
+		return false;
+	}
+	return true;
+}
+
+bool
+synfig::cairo_surface_mark_as_unmapped(cairo_surface_t* surface)
+{
+	if(!surface)
+		return false;
+
+	cairo_status_t status;
+	status = cairo_surface_set_user_data (surface, &CairoSurface::mapped_key, NULL, NULL);
+	if(status)
+	{
+		synfig::error("Cairo surface: Can't unset mapped status");
+		return false;
+	}
+	status = cairo_surface_set_user_data (surface, &CairoSurface::unmapped_key, &CairoSurface::unmapped, NULL);
+	if(status)
+	{
+		synfig::error("Cairo surface: Can't set unmapped status");
+		return false;
+	}
+	return true;
+}
 
 Target_Scanline::Handle
 synfig::surface_target(Surface *surface)
@@ -477,7 +534,7 @@ CairoSurface::unmap_cairo_image()
 bool
 CairoSurface::is_mapped()const
 {
-	return (cs_image_!=NULL);
+	return cairo_surface_is_mapped(cs_);
 }
 
 
