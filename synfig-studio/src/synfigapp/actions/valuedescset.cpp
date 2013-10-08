@@ -140,7 +140,7 @@ Action::ValueDescSet::set_param(const synfig::String& name, const Action::Param 
 	if(name=="new_value" && param.get_type()==Param::TYPE_VALUE)
 	{
 		value=param.get_value();
-
+	synfig::info("setting new value");
 		return true;
 	}
 
@@ -997,6 +997,7 @@ Action::ValueDescSet::prepare()
 		}
 	}
 
+	synfig::info("value type is : %s", ValueBase::type_local_name(value.get_contained_type()).c_str());
 	// If we are in animate editing mode
 	// TODO: Can we replace local_value to value after all parameters will be converted into ValueBase type?
 	if(get_edit_mode()&MODE_ANIMATE && !value_desc.get_static())
@@ -1061,6 +1062,7 @@ Action::ValueDescSet::prepare()
 			waypoint.set_before(inter==INTERPOLATION_UNDEFINED?synfigapp::Main::get_interpolation():inter);
 			waypoint.set_after(inter==INTERPOLATION_UNDEFINED?synfigapp::Main::get_interpolation():inter);
 		}
+		synfig::info("value type for waypoint is : %s", ValueBase::type_local_name(value.get_contained_type()).c_str());
 		waypoint.set_value(value);
 		action->set_param("canvas",get_canvas());
 		action->set_param("canvas_interface",get_canvas_interface());
@@ -1089,7 +1091,44 @@ Action::ValueDescSet::prepare()
 			}
 			else
 			if(ValueNode_Animated::Handle::cast_dynamic(value_desc.get_value_node()))
-				throw Error(_("You must be in Animate-Editing-Mode to directly manipulate this value"));
+			{
+				synfig::info("non animated mode and value desc is value node animated");
+				// If we are in not animate mode let's assume that the user wants to offset the
+				// animated value node by the difference.
+				// this is valid only for value types that allows it.
+				ValueNode_Animated::Handle animated=ValueNode_Animated::Handle::cast_dynamic(value_desc.get_value_node());
+				Waypoint waypoint;
+				ValueBase::Type type=animated->get_type();
+				synfig::info("animated type is : %s", ValueBase::type_local_name(type).c_str());
+				if(value.get_type()==type &&
+					(type == ValueBase::TYPE_INTEGER
+					|| type == ValueBase::TYPE_ANGLE
+					|| type == ValueBase::TYPE_TIME
+					|| type == ValueBase::TYPE_REAL
+					|| type == ValueBase::TYPE_VECTOR)
+					)
+				{
+					synfig::info("type is one of the candidates");
+					synfig::ValueNode_Animated::WaypointList::const_iterator iter;
+					ValueBase offset=ValueBase(value.get(type)-(*animated)(time).get(type));
+					synfig::info("offset is set");
+					for(iter=animated->waypoint_list().begin(); iter<animated->waypoint_list().end(); iter++)
+					{
+						waypoint=*iter;
+						waypoint.set_value(waypoint.get_value().get(type)+offset.get(type));
+						Action::Handle action(WaypointSetSmart::create());
+						action->set_param("canvas",get_canvas());
+						action->set_param("canvas_interface",get_canvas_interface());
+						action->set_param("value_node",ValueNode::Handle(animated));
+						action->set_param("waypoint",waypoint);
+						if(!action->is_ready())
+							throw Error(Error::TYPE_NOTREADY);
+						add_action(action);
+					}
+				}
+				else
+					throw Error(_("You must be in Animate-Editing-Mode to directly manipulate this value"));
+			}
 			else
 				throw Error(_("Direct manipulation of this ValueNode type is not yet supported"));
 		}
