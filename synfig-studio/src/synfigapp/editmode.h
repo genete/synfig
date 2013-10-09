@@ -46,6 +46,7 @@ enum EditMode
 	MODE_ANIMATE_FUTURE	=(1<<1),	//!< Respect <i>future</i> keyframes
 	MODE_ANIMATE_PAST	=(1<<2),	//!< Respect <i>past</i> keyframes
 	MODE_ANIMATE_ALL	=(3<<1),	//!< Respect <i>all</i> keyframes
+	MODE_ANIMATE_OFFSET	=(1<<4),	//!< Offsets waypoints
 
 	MODE_UNDEFINED		=(~0)	//!< Undefined Mode
 }; // END of enum EditMode

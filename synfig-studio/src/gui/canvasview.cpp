@@ -1000,6 +1000,18 @@ CanvasView::create_time_bar()
 	animatebutton->set_relief(Gtk::RELIEF_NONE);
 	animatebutton->show();
 
+	//Setup the Offset Waypoints Button
+	Gtk::IconSize iconsize2=Gtk::IconSize::from_name("synfig-small_icon_16x16");
+	Gtk::Image *icon2 = manage(new Gtk::Image(Gtk::StockID("synfig-about"), iconsize2));
+	offsetwaypointsbutton = Gtk::manage(new class Gtk::ToggleButton());
+	offsetwaypointsbutton->set_tooltip_text(_("Toggle Offset Waypoints"));
+	icon2->set_padding(0,0);
+	icon2->show();
+	offsetwaypointsbutton->add(*icon2);
+	offsetwaypointsbutton->signal_toggled().connect(sigc::mem_fun(*this, &studio::CanvasView::toggle_offsetwaypointsbutton));
+	offsetwaypointsbutton->set_relief(Gtk::RELIEF_NONE);
+	offsetwaypointsbutton->show();
+
 	//Setup the audio display
 	disp_audio->set_size_request(-1,32); //disp_audio->show();
 	disp_audio->set_time_adjustment(&time_adjustment());
@@ -1057,7 +1069,7 @@ CanvasView::create_time_bar()
 	widget_kf_list->set_size_request(-1,header_height/3+1);
 
 	Gtk::Alignment *space = Gtk::manage(new Gtk::Alignment());
-	space->set_size_request(8);
+	space->set_size_request(1);
         space->show();
 
 	//Attach widgets to the timebar
@@ -1070,6 +1082,7 @@ CanvasView::create_time_bar()
 	timebar->attach(*keyframedial, 3, 4, 0, 2, Gtk::SHRINK, Gtk::SHRINK);
 	timebar->attach(*space, 4, 5, 0, 2, Gtk::FILL, Gtk::FILL);
 	timebar->attach(*animatebutton, 5, 6, 0, 2, Gtk::SHRINK, Gtk::SHRINK);
+	timebar->attach(*offsetwaypointsbutton, 6, 7, 0, 2, Gtk::SHRINK, Gtk::SHRINK);
 	//timebar->attach(*keyframebutton, 1, 2, 3, 4, Gtk::SHRINK, Gtk::SHRINK);
 
 	timebar->show();
@@ -2926,6 +2939,15 @@ CanvasView::toggle_animatebutton()
 		set_mode(get_mode()-synfigapp::MODE_ANIMATE);
 	else
 		set_mode(get_mode()|synfigapp::MODE_ANIMATE);
+}
+
+void
+CanvasView::toggle_offsetwaypointsbutton()
+{
+	if(get_mode()&synfigapp::MODE_ANIMATE_OFFSET)
+		set_mode(get_mode()-synfigapp::MODE_ANIMATE_OFFSET);
+	else
+		set_mode(get_mode()|synfigapp::MODE_ANIMATE_OFFSET);
 }
 
 void

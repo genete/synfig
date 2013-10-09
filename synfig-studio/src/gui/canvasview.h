@@ -272,6 +272,7 @@ private:
 	Gtk::Table *timebar;
 	Gtk::Table *displaybar;
 	Gtk::ToggleButton *animatebutton;
+	Gtk::ToggleButton *offsetwaypointsbutton;
 	Gtk::Button *keyframebutton;
 	Gtk::ToggleButton *pastkeyframebutton;
 	Gtk::ToggleButton *futurekeyframebutton;
@@ -470,7 +471,7 @@ private:
 	void toggle_onion_skin();
 
 	void toggle_animatebutton();
-
+	void toggle_offsetwaypointsbutton();
 
 	/*
  -- ** -- P U B L I C   M E T H O D S -----------------------------------------

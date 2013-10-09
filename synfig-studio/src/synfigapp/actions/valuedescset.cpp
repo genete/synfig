@@ -1088,7 +1088,8 @@ Action::ValueDescSet::prepare()
 				return;
 			}
 			else
-			if(ValueNode_Animated::Handle::cast_dynamic(value_desc.get_value_node()))
+			if(ValueNode_Animated::Handle::cast_dynamic(value_desc.get_value_node())
+				&& get_edit_mode()&MODE_ANIMATE_OFFSET)
 			{
 				// If we are in not animate mode let's assume that the user wants to offset the
 				// animated value node by the difference.
