@@ -36,6 +36,7 @@
 #include "valuenodeconstset.h"
 #include "valuedescconnect.h"
 #include "waypointsetsmart.h"
+#include "waypointset.h"
 
 #include "valuedescset.h"
 #include <synfigapp/canvasinterface.h>
@@ -140,7 +141,6 @@ Action::ValueDescSet::set_param(const synfig::String& name, const Action::Param 
 	if(name=="new_value" && param.get_type()==Param::TYPE_VALUE)
 	{
 		value=param.get_value();
-	synfig::info("setting new value");
 		return true;
 	}
 
@@ -997,7 +997,6 @@ Action::ValueDescSet::prepare()
 		}
 	}
 
-	synfig::info("value type is : %s", ValueBase::type_local_name(value.get_contained_type()).c_str());
 	// If we are in animate editing mode
 	// TODO: Can we replace local_value to value after all parameters will be converted into ValueBase type?
 	if(get_edit_mode()&MODE_ANIMATE && !value_desc.get_static())
@@ -1062,7 +1061,6 @@ Action::ValueDescSet::prepare()
 			waypoint.set_before(inter==INTERPOLATION_UNDEFINED?synfigapp::Main::get_interpolation():inter);
 			waypoint.set_after(inter==INTERPOLATION_UNDEFINED?synfigapp::Main::get_interpolation():inter);
 		}
-		synfig::info("value type for waypoint is : %s", ValueBase::type_local_name(value.get_contained_type()).c_str());
 		waypoint.set_value(value);
 		action->set_param("canvas",get_canvas());
 		action->set_param("canvas_interface",get_canvas_interface());
@@ -1092,15 +1090,14 @@ Action::ValueDescSet::prepare()
 			else
 			if(ValueNode_Animated::Handle::cast_dynamic(value_desc.get_value_node()))
 			{
-				synfig::info("non animated mode and value desc is value node animated");
 				// If we are in not animate mode let's assume that the user wants to offset the
 				// animated value node by the difference.
 				// this is valid only for value types that allows it.
 				ValueNode_Animated::Handle animated=ValueNode_Animated::Handle::cast_dynamic(value_desc.get_value_node());
 				Waypoint waypoint;
 				ValueBase::Type type=animated->get_type();
-				synfig::info("animated type is : %s", ValueBase::type_local_name(type).c_str());
-				if(value.get_type()==type &&
+				ValueBase::Type value_type=value.get_type();
+				if(value_type==type &&
 					(type == ValueBase::TYPE_INTEGER
 					|| type == ValueBase::TYPE_ANGLE
 					|| type == ValueBase::TYPE_TIME
@@ -1108,15 +1105,33 @@ Action::ValueDescSet::prepare()
 					|| type == ValueBase::TYPE_VECTOR)
 					)
 				{
-					synfig::info("type is one of the candidates");
 					synfig::ValueNode_Animated::WaypointList::const_iterator iter;
-					ValueBase offset=ValueBase(value.get(type)-(*animated)(time).get(type));
-					synfig::info("offset is set");
 					for(iter=animated->waypoint_list().begin(); iter<animated->waypoint_list().end(); iter++)
 					{
 						waypoint=*iter;
-						waypoint.set_value(waypoint.get_value().get(type)+offset.get(type));
-						Action::Handle action(WaypointSetSmart::create());
+						ValueBase waypoint_value(waypoint.get_value());
+						switch (type)
+						{
+							case ValueBase::TYPE_INTEGER:
+								waypoint_value=ValueBase(waypoint_value.get(int())+value.get(int())-(*animated)(time).get(int()));
+								break;
+							case ValueBase::TYPE_ANGLE:
+								waypoint_value=ValueBase(waypoint_value.get(Angle())+value.get(Angle())-(*animated)(time).get(Angle()));
+								break;
+							case ValueBase::TYPE_TIME:
+								waypoint_value=ValueBase(waypoint_value.get(Time())+value.get(Time())-(*animated)(time).get(Time()));
+								break;
+							case ValueBase::TYPE_REAL:
+								waypoint_value=ValueBase(waypoint_value.get(Real())+value.get(Real())-(*animated)(time).get(Real()));
+								break;
+							case ValueBase::TYPE_VECTOR:
+								waypoint_value=ValueBase(waypoint_value.get(Vector())+value.get(Vector())-(*animated)(time).get(Vector()));
+								break;
+							default:
+								break;
+						}
+						waypoint.set_value(waypoint_value);
+						Action::Handle action(WaypointSet::create());
 						action->set_param("canvas",get_canvas());
 						action->set_param("canvas_interface",get_canvas_interface());
 						action->set_param("value_node",ValueNode::Handle(animated));
@@ -1125,6 +1140,7 @@ Action::ValueDescSet::prepare()
 							throw Error(Error::TYPE_NOTREADY);
 						add_action(action);
 					}
+					return;
 				}
 				else
 					throw Error(_("You must be in Animate-Editing-Mode to directly manipulate this value"));
