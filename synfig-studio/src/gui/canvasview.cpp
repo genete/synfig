@@ -2925,6 +2925,10 @@ CanvasView::on_mode_changed(synfigapp::CanvasInterface::Mode mode)
 		icon->show();
 		pastkeyframebutton->set_active(false);
 	}
+	if(mode&synfigapp::MODE_ANIMATE_OFFSET)
+		offsetwaypointsbutton->set_active(true);
+	else
+		offsetwaypointsbutton->set_active(false);
 
 	work_area->queue_draw();
 	toggling_animate_mode_=false;
@@ -2944,6 +2948,8 @@ CanvasView::toggle_animatebutton()
 void
 CanvasView::toggle_offsetwaypointsbutton()
 {
+	if(toggling_animate_mode_)
+		return;
 	if(get_mode()&synfigapp::MODE_ANIMATE_OFFSET)
 		set_mode(get_mode()-synfigapp::MODE_ANIMATE_OFFSET);
 	else
