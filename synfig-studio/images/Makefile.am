@@ -24,6 +24,7 @@ EXTRA_DIST = \
 	splash_screen_development.sif.in \
 	about_icon.sif \
 	animate_mode_icons.sif \
+	offset_waypoints_icon.sif\
 	clear_redo_icon.sif \
 	clear_undo_icon.sif \
 	graphs_icon.sif \
@@ -204,6 +205,7 @@ IMAGES = \
 	animate_loop_icon.$(EXT) \
 	animate_mode_off_icon.$(EXT) \
 	animate_mode_on_icon.$(EXT) \
+	offset_waypoints_icon.$(EXT) \
 	\
 	rename_icon.$(EXT) \
 	set_fill_color.$(EXT) \

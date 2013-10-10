@@ -1002,7 +1002,7 @@ CanvasView::create_time_bar()
 
 	//Setup the Offset Waypoints Button
 	Gtk::IconSize iconsize2=Gtk::IconSize::from_name("synfig-small_icon_16x16");
-	Gtk::Image *icon2 = manage(new Gtk::Image(Gtk::StockID("synfig-about"), iconsize2));
+	Gtk::Image *icon2 = manage(new Gtk::Image(Gtk::StockID("synfig-offset_waypoints"), iconsize2));
 	offsetwaypointsbutton = Gtk::manage(new class Gtk::ToggleButton());
 	offsetwaypointsbutton->set_tooltip_text(_("Toggle Offset Waypoints"));
 	icon2->set_padding(0,0);
