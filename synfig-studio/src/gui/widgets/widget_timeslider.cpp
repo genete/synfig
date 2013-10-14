@@ -339,7 +339,7 @@ studio::render_time_point_to_window(
 
 /* === E N T R Y P O I N T ================================================= */
 double defaultfps = 24;
-const int fullheight = 20;
+const double fullheight = 20;
 
 Widget_Timeslider::Widget_Timeslider()
 :layout(Pango::Layout::create(get_pango_context())),
@@ -431,27 +431,15 @@ void Widget_Timeslider::refresh()
 
 bool Widget_Timeslider::redraw(bool /*doublebuffer*/)
 {
-	Glib::RefPtr<Gdk::Window> window = get_window();
+	Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
-	if(!window) return false;
-
-	Glib::RefPtr<Gdk::GC>	gc = Gdk::GC::create(window);
-	if(!gc) return false;
-
-	//synfig::info("Drawing Timeslider");
-	//clear	and update to current values
-	//invalidated = false;
-	//update_times();
-
-	//draw grey rectangle
-	Gdk::Color	c("#7f7f7f");
-	gc->set_rgb_fg_color(c);
-	gc->set_background(c);
-
-	//Get the data for the window and the params to draw it...
 	int w = get_width(), h = get_height();
-
-	window->draw_rectangle(gc,true,0,0,w,h);
+	//draw grey rectangle
+	cr->save();
+	cr->set_source_rgb(0.5, 0.5, 0.5);
+	cr->rectangle(0.0,0.0,w,h);
+	cr->fill();
+	cr->restore();
 
 	const double EPSILON = 1e-6;
 	if(!adj_timescale || w == 0) return true;
@@ -463,8 +451,6 @@ bool Widget_Timeslider::redraw(bool /*doublebuffer*/)
 
 	if(end-start < EPSILON) return true;
 
-	//synfig::info("Drawing Lines");
-
 	//draw all the time stuff
 	double dtdp = (end - start)/get_width();
 	double dpdt = 1/dtdp;
@@ -472,13 +458,16 @@ bool Widget_Timeslider::redraw(bool /*doublebuffer*/)
 	//lines
 
 	//Draw the time line...
-	double tpx = (current-start)*dpdt;
-	gc->set_rgb_fg_color(Gdk::Color("#ffaf00"));
-	window->draw_line(gc,round_to_int(tpx),0,round_to_int(tpx),fullheight);
+	double tpx = round_to_int((current-start)*dpdt)+0.5;
+	cr->save();
+	cr->set_source_rgb(1.0, 175.0/255.0, 0.0);
+	cr->set_line_width(1.0);
+	cr->move_to(tpx, 0.0);
+	cr->line_to(tpx, fullheight);
+	cr->stroke();
+	cr->restore();
 
-	//normal line/text color
-	gc->set_rgb_fg_color(Gdk::Color("#333333"));
-
+	// Calculate the line intervals
 	int ifps = round_to_int(fps);
 	if (ifps < 1) ifps = 1;
 
@@ -582,24 +571,31 @@ bool Widget_Timeslider::redraw(bool /*doublebuffer*/)
 	//synfig::info("Initial values: %.4lf t, %.1lf pixels, %d i", time,pixel,sdindex);
 
 	//loop to draw
-	const int heightbig = 12;
-	const int heightsmall = 4;
+	const double heightbig = 12;
+	const double heightsmall = 4;
+
+	// Draw the lines and timecode
+	//normal line/text color
+	cr->save();
+	cr->set_source_rgb(51.0/255.0,51.0/255.0,51.0/255.0);
+	cr->set_line_width(1.0);
 
 	int width = get_width();
 	while( pixel < width )
 	{
-		int xpx = round_to_int(pixel);
+		double xpx = round_to_int(pixel)+0.5;
 
 		//draw big
 		if(sdindex == 0)
 		{
-			window->draw_line(gc,xpx,0,xpx,heightbig);
+			cr->move_to(xpx,0);
+			cr->line_to(xpx,heightbig);
+			cr->stroke();
 			//round the time to nearest frame and draw the text
 			Time tm((double)time);
 			if(get_global_fps()) tm.round(get_global_fps());
 			Glib::ustring timecode(tm.get_string(get_global_fps(),App::get_time_format()));
 
-			//gc->set_rgb_fg_color(Gdk::Color("#000000"));
 			layout->set_text(timecode);
 			Pango::AttrList attr_list;
 			// Aproximately a font size of 8 pixels.
@@ -611,10 +607,13 @@ bool Widget_Timeslider::redraw(bool /*doublebuffer*/)
 			pango_size.set_end_index(64);
 			attr_list.change(pango_size);
 			layout->set_attributes(attr_list);
-			window->draw_layout(gc,xpx+2,0,layout);
+			cr->move_to(xpx+1.0,0);
+			layout->show_in_cairo_context(cr);
 		}else
 		{
-			window->draw_line(gc,xpx,0,xpx,heightsmall);
+			cr->move_to(xpx,0);
+			cr->line_to(xpx,heightsmall);
+			cr->stroke();
 		}
 
 		//increment time and position
@@ -624,7 +623,7 @@ bool Widget_Timeslider::redraw(bool /*doublebuffer*/)
 		//increment index
 		if(++sdindex >= subdiv) sdindex -= subdiv;
 	}
-
+	cr->restore();
 	return true;
 }
 
