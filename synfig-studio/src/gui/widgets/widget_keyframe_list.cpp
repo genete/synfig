@@ -101,13 +101,17 @@ Widget_Keyframe_List::redraw()
 	synfig::Time bottom(adj_timescale->get_lower());
 
 	//! The graphic context
-	Glib::RefPtr<Gdk::GC> gc(Gdk::GC::create(window));
+	Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
+
 	//! A rectangle that defines the drawing area.
 	Gdk::Rectangle area(0,0,w,h);
-
+	Gdk::Color background(Gdk::Color("#9d9d9d"));
 	//! draw a background
-	gc->set_rgb_fg_color(Gdk::Color("#9d9d9d"));
-	window->draw_rectangle(gc, true, 0, 0, w, h);
+	cr->save();
+	cr->set_source_rgb(background.get_red_p(), background.get_green_p(), background.get_blue_p());
+	cr->rectangle(0.0,0.0,w,h);
+	cr->fill();
+	cr->restore();
 
 	if(!editable_)
 	{
