@@ -138,7 +138,6 @@ Renderer_Canvas::render_vfunc(
 		w(get_w()),
 		h(get_h());
 
-	Glib::RefPtr<Gdk::GC> gc(Gdk::GC::create(drawable));
 	Cairo::RefPtr<Cairo::Context> cr = drawable->create_cairo_context();
 	if(studio::App::workarea_uses_cairo)
 	{
@@ -238,17 +237,6 @@ Renderer_Canvas::render_vfunc(
 					);
 				cr->paint();
 				cr->restore();
-/*
-				drawable->draw_pixbuf(
-					gc, //GC
-					tile_book[0].first, //pixbuf
-					0, 0,	// Source X and Y
-					round_to_int(x),round_to_int(y),	// Dest X and Y
-					-1,-1,	// Width and Height
-					Gdk::RGB_DITHER_MAX,		// RgbDither
-					2, 2 // Dither offset X and Y
-					);
-*/
 			}
 			if(tile_book[0].second!=get_refreshes() && get_canceled()==false && get_rendering()==false && get_queued()==false)
 				get_work_area()->async_update_preview();
@@ -291,18 +279,6 @@ Renderer_Canvas::render_vfunc(
 							);
 						cr->paint();
 						cr->restore();
-/*
-
-						drawable->draw_pixbuf(
-							gc, //GC
-							tile_book[index].first, //pixbuf
-							0, 0,	// Source X and Y
-							round_to_int(x)+tx,round_to_int(y)+ty,	// Dest X and Y
-							-1,-1,	// Width and Height
-							Gdk::RGB_DITHER_MAX,		// RgbDither
-							2, 2 // Dither offset X and Y
-							);
-*/
 					}
 					if(tile_book[index].second!=get_refreshes())
 						needs_refresh=true;
