@@ -160,7 +160,6 @@ Widget_Gradient::redraw(GdkEventExpose */*bleh*/)
 	const int h(get_height());
 	const int w(get_width());
 
-	Glib::RefPtr<Gdk::GC> gc(Gdk::GC::create(window));
 	Gdk::Rectangle area(0,0,w,h);
 	if(!editable_)
 	{
@@ -170,7 +169,6 @@ Widget_Gradient::redraw(GdkEventExpose */*bleh*/)
 
 	render_gradient_to_window(window,Gdk::Rectangle(0,0,w,h),gradient_);
 
-	gc->set_rgb_fg_color(Gdk::Color("#7f7f7f"));
 	Gradient::iterator iter,selected_iter;
 	bool show_selected(false);
 	for(iter=gradient_.begin();iter!=gradient_.end();iter++)
