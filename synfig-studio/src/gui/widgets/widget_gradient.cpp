@@ -58,52 +58,79 @@ using namespace studio;
 void
 studio::render_gradient_to_window(const Glib::RefPtr<Gdk::Drawable>& window,const Gdk::Rectangle& ca,const synfig::Gradient &gradient)
 {
-	int	height = ca.get_height();
-	int	width = ca.get_width()-4;
+	double	height = ca.get_height();
+	double	width = ca.get_width();
 
-	float sample_width(1.0f/(float)width);
-	Glib::RefPtr<Gdk::GC> gc(Gdk::GC::create(window));
+	Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
 	const Color bg1(0.25, 0.25, 0.25);
 	const Color bg2(0.5, 0.5, 0.5);
+	double r1(App::gamma.r_F32_to_F32(bg1.get_r()));
+	double g1(App::gamma.g_F32_to_F32(bg1.get_g()));
+	double b1(App::gamma.b_F32_to_F32(bg1.get_b()));
+	double r2(App::gamma.r_F32_to_F32(bg2.get_r()));
+	double g2(App::gamma.g_F32_to_F32(bg2.get_g()));
+	double b2(App::gamma.b_F32_to_F32(bg2.get_b()));
 	Gdk::Color gdk_c;
-	int i;
-	for(i=0;i<width;i++)
+	Cairo::RefPtr<Cairo::ImageSurface> image=Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, height, height);
+	Cairo::RefPtr<Cairo::Context> subcr = Cairo::Context::create(image);
+	subcr->save();
+	subcr->set_source_rgb(r1, g1, b1);
+	subcr->paint();
+	subcr->restore();
+	subcr->save();
+	subcr->set_source_rgb(r2, g2, b2);
+	subcr->rectangle(0.0, 0.0, height/2.0, height/2.0);
+	subcr->clip();
+	subcr->paint();
+	subcr->restore();
+	subcr->save();
+	subcr->set_source_rgb(r2, g2, b2);
+	subcr->rectangle(height/2.0, height/2.0, height/2.0, height/2.0);
+	subcr->clip();
+	subcr->paint();
+	subcr->restore();
+
+	Cairo::RefPtr<Cairo::SurfacePattern> pattern = Cairo::SurfacePattern::create (image);
+	pattern->set_extend(Cairo::EXTEND_REPEAT);
+	cr->save();
+	cr->rectangle(ca.get_x(), ca.get_y(), ca.get_width()-2, ca.get_height());
+	cr->translate(ca.get_x(), ca.get_y());
+	cr->set_source(pattern);
+	cr->fill();
+	cr->restore();
+
+	Cairo::RefPtr<Cairo::LinearGradient> gpattern = Cairo::LinearGradient::create(ca.get_x(), ca.get_y(), ca.get_x()+width, ca.get_y());
+	double a, r, g, b;
+	Gradient::CPoint cp;
+	Gradient::const_iterator iter;
+	for(iter=gradient.begin();iter!=gradient.end(); iter++)
 	{
-		const Color c(gradient(float(i)/float(width),sample_width));
-		const Color c1(Color::blend(c,bg1,1.0).clamped());
-		const Color c2(Color::blend(c,bg2,1.0).clamped());
-		gushort r1(256*App::gamma.r_F32_to_U8(c1.get_r()));
-		gushort g1(256*App::gamma.g_F32_to_U8(c1.get_g()));
-		gushort b1(256*App::gamma.b_F32_to_U8(c1.get_b()));
-		gushort r2(256*App::gamma.r_F32_to_U8(c2.get_r()));
-		gushort g2(256*App::gamma.g_F32_to_U8(c2.get_g()));
-		gushort b2(256*App::gamma.b_F32_to_U8(c2.get_b()));
-
-		if((i*2/height)&1)
-		{
-			gdk_c.set_rgb(r1,g1,b1);
-			gc->set_rgb_fg_color(gdk_c);
-			window->draw_rectangle(gc, true, ca.get_x()+i+2, ca.get_y(), 1, height/2);
-
-			gdk_c.set_rgb(r2,g2,b2);
-			gc->set_rgb_fg_color(gdk_c);
-			window->draw_rectangle(gc, true, ca.get_x()+i+2, ca.get_y()+height/2, 1, height/2);
-		}
-		else
-		{
-			gdk_c.set_rgb(r2,g2,b2);
-			gc->set_rgb_fg_color(gdk_c);
-			window->draw_rectangle(gc, true, ca.get_x()+i+2, ca.get_y(), 1, height/2);
-
-			gdk_c.set_rgb(r1,g1,b1);
-			gc->set_rgb_fg_color(gdk_c);
-			window->draw_rectangle(gc, true, ca.get_x()+i+2, ca.get_y()+height/2, 1, height/2);
-		}
+		cp=*iter;
+		a=App::gamma.r_F32_to_F32(cp.color.get_a());
+		r=App::gamma.r_F32_to_F32(cp.color.get_r());
+		g=App::gamma.r_F32_to_F32(cp.color.get_g());
+		b=App::gamma.r_F32_to_F32(cp.color.get_b());
+		gpattern->add_color_stop_rgba(cp.pos, r, g, b, a);
 	}
-	gc->set_rgb_fg_color(Gdk::Color("#ffffff"));
-	window->draw_rectangle(gc, false, ca.get_x()+1, ca.get_y()+1, ca.get_width()-3, height-3);
-	gc->set_rgb_fg_color(Gdk::Color("#000000"));
-	window->draw_rectangle(gc, false, ca.get_x(), ca.get_y(), ca.get_width()-1, height-1);
+
+	cr->save();
+	cr->rectangle(ca.get_x(), ca.get_y(), ca.get_width()-2, ca.get_height());
+	cr->set_source(gpattern);
+	cr->fill();
+	cr->restore();
+
+	cr->save();
+	cr->set_line_width(1.0);
+	cr->set_source_rgb(1.0, 1.0, 1.0);
+	cr->rectangle(ca.get_x()+1.5, ca.get_y()+1.5, width-3, height-3);
+	cr->stroke();
+	cr->restore();
+	cr->save();
+	cr->set_line_width(1.0);
+	cr->set_source_rgb(0.0, 0.0, 0.0);
+	cr->rectangle(ca.get_x()+0.5, ca.get_y()+0.5, width-1, height-1);
+	cr->stroke();
+	cr->restore();
 }
 
 /* === M E T H O D S ======================================================= */
