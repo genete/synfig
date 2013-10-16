@@ -58,18 +58,23 @@ using namespace studio;
 void
 studio::render_gradient_to_window(const Glib::RefPtr<Gdk::Drawable>& window,const Gdk::Rectangle& ca,const synfig::Gradient &gradient)
 {
+	Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
+	render_gradient_to_cairo(cr, ca, gradient);
+}
+void
+studio::render_gradient_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr,const Gdk::Rectangle& ca,const synfig::Gradient &gradient)
+{
 	double	height = ca.get_height();
 	double	width = ca.get_width();
 
-	Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
 	const Color bg1(0.25, 0.25, 0.25);
 	const Color bg2(0.5, 0.5, 0.5);
-	double r1(App::gamma.r_F32_to_F32(bg1.get_r()));
-	double g1(App::gamma.g_F32_to_F32(bg1.get_g()));
-	double b1(App::gamma.b_F32_to_F32(bg1.get_b()));
-	double r2(App::gamma.r_F32_to_F32(bg2.get_r()));
-	double g2(App::gamma.g_F32_to_F32(bg2.get_g()));
-	double b2(App::gamma.b_F32_to_F32(bg2.get_b()));
+	double r1(bg1.get_r());
+	double g1(bg1.get_g());
+	double b1(bg1.get_b());
+	double r2(bg2.get_r());
+	double g2(bg2.get_g());
+	double b2(bg2.get_b());
 	Gdk::Color gdk_c;
 	Cairo::RefPtr<Cairo::ImageSurface> image=Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, height, height);
 	Cairo::RefPtr<Cairo::Context> subcr = Cairo::Context::create(image);
@@ -106,10 +111,10 @@ studio::render_gradient_to_window(const Glib::RefPtr<Gdk::Drawable>& window,cons
 	for(iter=gradient.begin();iter!=gradient.end(); iter++)
 	{
 		cp=*iter;
-		a=App::gamma.r_F32_to_F32(cp.color.get_a());
-		r=App::gamma.r_F32_to_F32(cp.color.get_r());
-		g=App::gamma.r_F32_to_F32(cp.color.get_g());
-		b=App::gamma.r_F32_to_F32(cp.color.get_b());
+		a=cp.color.get_a();
+		r=cp.color.get_r();
+		g=cp.color.get_g();
+		b=cp.color.get_b();
 		gpattern->add_color_stop_rgba(cp.pos, r, g, b, a);
 	}
 
