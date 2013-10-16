@@ -176,6 +176,29 @@ synfig::cairo_image_target(cairo_surface_t **surface)
 	return Target_Cairo::Handle(new target2cairo_image(surface));
 }
 
+void
+synfig::gamma_filter(cairo_surface_t *surface, const synfig::Gamma gamma)
+{
+	CairoSurface cairo_s;
+	cairo_s.set_cairo_surface(surface);
+	cairo_s.map_cairo_image();
+	int w=cairo_s.get_w();
+	int h=cairo_s.get_h();
+	for(int y=0; y<h; y++)
+		for(int x=0; x<w; x++)
+		{
+			CairoColor c=cairo_s[y][x];
+			float a=c.get_alpha();
+			unsigned char r=(unsigned char)(a*gamma.r_F32_to_F32(c.get_r()/a));
+			unsigned char g=(unsigned char)(a*gamma.g_F32_to_F32(c.get_g()/a));
+			unsigned char b=(unsigned char)(a*gamma.b_F32_to_F32(c.get_b()/a));
+			c.set_r(r);
+			c.set_g(g);
+			c.set_b(b);
+			cairo_s[y][x]=c;
+		}
+	cairo_s.unmap_cairo_image();
+}
 
 void
 synfig::Surface::clear()

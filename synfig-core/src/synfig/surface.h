@@ -268,6 +268,8 @@ public:
 etl::handle<Target_Scanline> surface_target(Surface *surface);
 //!Creates a target that will render to a cairo_surface_t image surface
 etl::handle<Target_Cairo> cairo_image_target(cairo_surface_t** surface);
+//! Filters the cairo surface based on gamma (hardcored for the moment to 2.2)
+void gamma_filter(cairo_surface_t* surface, const synfig::Gamma gamma);
 
 }; // END of namespace synfig
 

@@ -122,9 +122,7 @@ public:
 	//! Marks the end of a frame
 	/*! \see start_frame() */
 	virtual void end_frame()=0;
-	
-	//! Filters the cairo surface based on gamma (hardcored for the moment to 2.2)
-	static void gamma_filter(cairo_surface_t* surface, const synfig::Gamma gamma);
+
 
 private:
 	//! Renders the context to the surface
