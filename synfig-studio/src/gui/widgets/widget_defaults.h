@@ -85,9 +85,6 @@ public:
 
 	~Widget_Defaults();
 
-//	bool redraw(GdkEventExpose*bleh=NULL);
-
-//	bool on_event(GdkEvent *event);
 }; // END of class BlackLevelSelector
 
 }; // END of namespace studio
