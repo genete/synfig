@@ -40,6 +40,7 @@ namespace studio {
 
 void render_gradient_to_window(const Glib::RefPtr<Gdk::Drawable>& window,const Gdk::Rectangle& ca,const synfig::Gradient &gradient);
 void render_gradient_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr, const Gdk::Rectangle& ca, const synfig::Gradient &gradient);
+void render_checkerboard_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr, const Gdk::Rectangle& ca, const synfig::Color& dark, const synfig::Color& light);
 
 class Widget_Gradient : public Gtk::DrawingArea
 {

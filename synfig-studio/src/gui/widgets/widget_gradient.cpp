@@ -34,6 +34,7 @@
 #include "app.h"
 #include <gtkmm/menu.h>
 #include <synfig/exception.h>
+#include <synfig/surface.h>
 #include <ETL/misc>
 
 #include "general.h"
@@ -58,23 +59,35 @@ using namespace studio;
 void
 studio::render_gradient_to_window(const Glib::RefPtr<Gdk::Drawable>& window,const Gdk::Rectangle& ca,const synfig::Gradient &gradient)
 {
+	//TODO: those must be custom colors
+	synfig::Color dark(0.65, 0.65, 0.65);
+	synfig::Color light(0.88, 0.88, 0.88);
+	
 	Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
-	render_gradient_to_cairo(cr, ca, gradient);
+	int w=ca.get_width();
+	int h=ca.get_height();
+	Cairo::RefPtr<Cairo::Surface> grad=Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, w, h);
+	Cairo::RefPtr<Cairo::Context> subcr=Cairo::Context::create(grad);
+	render_gradient_to_cairo(subcr, Gdk::Rectangle(0, 0, w, h), gradient);
+	synfig::gamma_filter(grad->cobj(), App::gamma);
+	subcr->set_operator(Cairo::OPERATOR_DEST_OVER);
+	render_checkerboard_to_cairo(subcr, Gdk::Rectangle(0, 0, w, h), dark, light);
+	cr->set_source(grad, ca.get_x(), ca.get_y());
+	cr->paint();
 }
+
 void
-studio::render_gradient_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr,const Gdk::Rectangle& ca,const synfig::Gradient &gradient)
+studio::render_checkerboard_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr, const Gdk::Rectangle& ca, const synfig::Color& dark, const synfig::Color& light)
 {
 	double	height = ca.get_height();
 	double	width = ca.get_width();
 
-	const Color bg1(0.25, 0.25, 0.25);
-	const Color bg2(0.5, 0.5, 0.5);
-	double r1(bg1.get_r());
-	double g1(bg1.get_g());
-	double b1(bg1.get_b());
-	double r2(bg2.get_r());
-	double g2(bg2.get_g());
-	double b2(bg2.get_b());
+	double r1(dark.get_r());
+	double g1(dark.get_g());
+	double b1(dark.get_b());
+	double r2(light.get_r());
+	double g2(light.get_g());
+	double b2(light.get_b());
 	Gdk::Color gdk_c;
 	Cairo::RefPtr<Cairo::ImageSurface> image=Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, height, height);
 	Cairo::RefPtr<Cairo::Context> subcr = Cairo::Context::create(image);
@@ -98,11 +111,18 @@ studio::render_gradient_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr,const G
 	Cairo::RefPtr<Cairo::SurfacePattern> pattern = Cairo::SurfacePattern::create (image);
 	pattern->set_extend(Cairo::EXTEND_REPEAT);
 	cr->save();
-	cr->rectangle(ca.get_x(), ca.get_y(), ca.get_width()-2, ca.get_height());
+	cr->rectangle(ca.get_x(), ca.get_y(), width-2, height);
 	cr->translate(ca.get_x(), ca.get_y());
 	cr->set_source(pattern);
 	cr->fill();
 	cr->restore();
+}
+
+void
+studio::render_gradient_to_cairo(const Cairo::RefPtr<Cairo::Context>& cr,const Gdk::Rectangle& ca,const synfig::Gradient &gradient)
+{
+	double	height = ca.get_height();
+	double	width = ca.get_width();
 
 	Cairo::RefPtr<Cairo::LinearGradient> gpattern = Cairo::LinearGradient::create(ca.get_x(), ca.get_y(), ca.get_x()+width, ca.get_y());
 	double a, r, g, b;
