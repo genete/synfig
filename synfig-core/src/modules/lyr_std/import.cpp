@@ -402,11 +402,10 @@ Import::set_render_method(Context context, RenderMethod x)
 {
 	if(get_method() != x) // if the method is different
 	{
-		Layer_Bitmap::set_render_method(context, x); // set the method (and pass to the other layers)
 		importer=0; // invalidate the importer
 		cimporter=0;
 		set_param("filename", param_filename); // this will update the importer to the new type
 	}
-	else
-		context.set_render_method(x); // pass it down.
+	// Calls ancestor member implementation
+	Layer::set_render_method(context, x);
 }

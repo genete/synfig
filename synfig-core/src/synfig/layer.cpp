@@ -141,7 +141,8 @@ Layer::Layer():
 	active_(true),
 	exclude_from_rendering_(false),
 	param_z_depth(Real(0.0f)),
-	dirty_time_(Time::end())
+	dirty_time_(Time::end()),
+	method(SOFTWARE)
 {
 	_LayerCounter::counter++;
 	SET_INTERPOLATION_DEFAULTS();
@@ -520,6 +521,7 @@ Layer::set_time(IndependentContext context, Time time, const Point &pos)const
 void
 Layer::set_render_method(Context context, RenderMethod x)
 {
+	set_method(x);
 	context.set_render_method(x);
 }
 

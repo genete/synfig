@@ -63,7 +63,6 @@ using namespace etl;
 
 synfig::Layer_Bitmap::Layer_Bitmap():
     Layer_Composite	(1.0,Color::BLEND_COMPOSITE),
-	method			(SOFTWARE),
 	param_tl				(Point(-0.5,0.5)),
 	param_br				(Point(0.5,-0.5)),
 	param_c				(int(1)),
@@ -110,7 +109,7 @@ synfig::Layer_Bitmap::get_param(const String & param)const
 		ValueBase ret1(ValueBase::TYPE_INTEGER);
 		ret1=int(width);
 		ValueBase ret2(ValueBase::TYPE_INTEGER);
-		switch (method)
+		switch (get_method())
 		{
 				case SOFTWARE:
 				ret2=int(surface.get_w());
@@ -128,7 +127,7 @@ synfig::Layer_Bitmap::get_param(const String & param)const
 		ValueBase ret1(ValueBase::TYPE_INTEGER);
 		ret1=int(height);
 		ValueBase ret2(ValueBase::TYPE_INTEGER);
-		switch (method)
+		switch (get_method())
 		{
 			case SOFTWARE:
 				ret2=int(surface.get_h());
@@ -200,12 +199,6 @@ Layer_Bitmap::hit_check(synfig::Context context, const synfig::Point &pos)const
 	return context.hit_check(pos);
 }
 
-void
-synfig::Layer_Bitmap::set_render_method(Context context, RenderMethod x)
-{
-	set_method(x);
-	context.set_render_method(x);
-}
 
 inline
 const Color&

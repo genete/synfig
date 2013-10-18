@@ -305,6 +305,10 @@ private:
 	//! \see Layer::set_canvas()
 	sigc::connection parent_death_connect_;
 
+	//! Informs the layer which render method is going to be used.
+	//! This may determine some actions in the layer before render.
+	RenderMethod method;
+
 	/*
  -- ** -- S I G N A L S -------------------------------------------------------
 	*/
@@ -449,6 +453,10 @@ public:
 	/*! Notice that it could return the wrong handle to PasteCanvas if the layer */
 	/*! belongs to a exported canvas (canvas can be referenced multiple times)*/
 	Layer::LooseHandle get_parent_paste_canvas_layer()const;
+
+	//! Sets and gets the Render Method
+	void set_method(RenderMethod x) { method=x;}
+	RenderMethod get_method()const { return method;}
 
 	/*
  --	** -- V I R T U A L   F U N C T I O N S -----------------------------------

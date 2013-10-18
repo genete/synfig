@@ -47,7 +47,6 @@ class Layer_Bitmap : public Layer_Composite, public Layer_NoDeform
 {
 	const Color& filter(Color& c)const;
 	const CairoColor& filter(CairoColor& c)const;
-	RenderMethod method;
 public:
 	typedef etl::handle<Layer_Bitmap> Handle;
 
@@ -81,10 +80,6 @@ public:
 	virtual bool accelerated_cairorender(Context context, cairo_t *cr, int quality, const RendDesc &renddesc, ProgressCallback *cb)const;
 
 	virtual synfig::Layer::Handle hit_check(synfig::Context context, const synfig::Point &point)const;
-	
-	virtual void set_render_method(Context context, RenderMethod x);
-	void set_method(RenderMethod x) { method=x;}
-	RenderMethod get_method()const { return method;}
 	
 	void set_cairo_surface(cairo_surface_t* cs);
 
