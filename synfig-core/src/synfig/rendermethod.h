@@ -38,7 +38,8 @@ namespace synfig
 enum RenderMethod {
 	SOFTWARE = 0x100,               //!< Software rendering
 	OPENGL,                         //!< OpenGL rendering (not supported)
-	CAIRO                           //!< Cairo rendering
+	CAIRO,                          //!< Cairo rendering
+	SIMPLIFIED_CAIRO                //!< Cairo rendering with simple layers
 };
 }; // end namespace synfig
 /* === E N D =============================================================== */

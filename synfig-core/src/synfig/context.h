@@ -167,7 +167,8 @@ public:
 	static inline bool active(const ContextParams &context_params, const Layer &layer) {
 		return layer.active()
 		    && (context_params.render_excluded_contexts
-		    || !layer.get_exclude_from_rendering());
+		    || !layer.get_exclude_from_rendering())
+			&& !(layer.get_method()==SIMPLIFIED_CAIRO && !layer.simplified_cairo_visible());
 	}
 
 	//! Returns a value between 1.0 and 0.0 for layer visibility in z_depth range with this context_params
