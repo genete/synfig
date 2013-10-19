@@ -63,6 +63,7 @@ public:
 	virtual Vocab get_param_vocab()const;
 
 	virtual synfig::Layer::Handle hit_check(synfig::Context context, const synfig::Point &point)const;
+	virtual bool simplified_cairo_visible()const { return true; }
 
 }; // END of class Layer_SolidColor
 

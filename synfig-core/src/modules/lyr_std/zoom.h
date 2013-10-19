@@ -65,6 +65,7 @@ public:
 	virtual synfig::Rect get_full_bounding_rect(synfig::Context context)const;
 	virtual etl::handle<synfig::Transform> get_transform()const;
 
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* === E N D =============================================================== */

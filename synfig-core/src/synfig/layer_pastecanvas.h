@@ -188,7 +188,7 @@ public:
 	//! Checks to see if a part of the Paste Canvas Layer is directly under \a point
 	virtual synfig::Layer::Handle hit_check(synfig::Context context, const synfig::Point &point)const;
 	virtual void set_render_method(Context context, RenderMethod x);
-
+	virtual bool simplified_cairo_visible()const { return true; }
 protected:
 	//!	Function to be overloaded that fills the Time Point Set with
 	//! all the children Time Points. In this case the children Time Points

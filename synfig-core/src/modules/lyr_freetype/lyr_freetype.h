@@ -168,6 +168,7 @@ public:
 	virtual void reset_version(){old_version=false;}
 
 	virtual synfig::Rect get_bounding_rect()const;
+	virtual bool simplified_cairo_visible()const { return true; }
 
 private:
 	void new_font(const synfig::String &family, int style=0, int weight=400);

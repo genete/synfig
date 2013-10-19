@@ -76,6 +76,7 @@ public:
 	virtual void set_time(IndependentContext context, Time time, const Point &point)const;
 	
 	virtual void set_render_method(Context context, RenderMethod x);
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* === E N D =============================================================== */

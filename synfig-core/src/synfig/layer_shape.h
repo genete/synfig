@@ -121,6 +121,7 @@ public:
 	//This function translates Shape primitives to Cairo primitives. Currently only supported move_to and line_to.
 	bool shape_to_cairo(cairo_t* cr)const;
 	bool feather_cairo_surface(cairo_surface_t* surface, RendDesc renddesc, int quality)const;
+	virtual bool simplified_cairo_visible()const { return true; }
 
 private:
 	class 		PolySpan;

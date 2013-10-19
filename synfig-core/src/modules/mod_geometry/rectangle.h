@@ -77,6 +77,7 @@ public:
 	virtual synfig::Rect get_full_bounding_rect(synfig::Context context)const;
 
 	virtual Vocab get_param_vocab()const;
+	virtual bool simplified_cairo_visible()const { return true; }
 }; // END of class FilledRect
 
 /* === E N D =============================================================== */

@@ -67,6 +67,7 @@ public:
 	synfig::Layer::Handle hit_check(synfig::Context context, const synfig::Point &point)const;
 	virtual etl::handle<synfig::Transform> get_transform()const;
 
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* === E N D =============================================================== */

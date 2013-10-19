@@ -96,6 +96,8 @@ public:
 	virtual bool set_version(const synfig::String &ver);
 	//! Connects the parameter to another Value Node. Implementation for this layer
 	virtual bool connect_dynamic_param(const String& param, etl::loose_handle<ValueNode> x );
+	// Returns \true if the layer is visible in simplified Cairo render
+	virtual bool simplified_cairo_visible()const { return true; }
 
 private:
 

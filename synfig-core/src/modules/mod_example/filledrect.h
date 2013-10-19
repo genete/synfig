@@ -81,6 +81,7 @@ public:
 	virtual Vocab get_param_vocab()const;
 
 	virtual Layer::Handle hit_check(Context context, const Point &point)const;
+	virtual bool simplified_cairo_visible()const { return true; }
 }; // END of class FilledRect
 
 /* === E N D =============================================================== */

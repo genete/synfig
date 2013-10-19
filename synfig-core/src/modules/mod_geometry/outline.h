@@ -89,6 +89,7 @@ public:
 	virtual void set_time(IndependentContext context, Time time, Vector pos)const;
 	virtual bool set_version(const String &ver){if(ver=="0.1")old_version=true; return true;}
 	virtual void reset_version(){old_version=false;}
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* === E N D =============================================================== */

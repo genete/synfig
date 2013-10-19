@@ -457,7 +457,7 @@ public:
 	//! Sets and gets the Render Method
 	void set_method(RenderMethod x) { method=x;}
 	RenderMethod get_method()const { return method;}
-
+	
 	/*
  --	** -- V I R T U A L   F U N C T I O N S -----------------------------------
 	*/
@@ -590,6 +590,9 @@ public:
 	//! Retrieves the grow value from its parent canvas
 	Real get_parent_canvas_grow_value()const;
 
+	// Returns \true if the layer is visible in simplified Cairo render
+	virtual bool simplified_cairo_visible()const { return false; }
+	
 protected:
 
 	//! This is called whenever a parameter is changed

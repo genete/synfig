@@ -72,6 +72,7 @@ public:
 	virtual ValueBase get_param(const String & param)const;
 
 	virtual Vocab get_param_vocab()const;
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* === E N D =============================================================== */

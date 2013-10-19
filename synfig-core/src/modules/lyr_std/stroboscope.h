@@ -68,6 +68,7 @@ public:
 	virtual void set_time(IndependentContext context, Time time)const;
 	virtual bool accelerated_render(Context context,Surface *surface,int quality, const RendDesc &renddesc, ProgressCallback *cb)const;
 	virtual bool accelerated_cairorender(Context context,cairo_t *cr, int quality, const RendDesc &renddesc, ProgressCallback *cb)const;
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 /* === E N D =============================================================== */
 

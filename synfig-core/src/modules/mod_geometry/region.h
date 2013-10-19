@@ -68,6 +68,7 @@ public:
 	virtual Vocab get_param_vocab()const;
 	virtual void set_time(IndependentContext context, Time time)const;
 	virtual void set_time(IndependentContext context, Time time, Vector pos)const;
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* === E N D =============================================================== */

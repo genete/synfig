@@ -124,6 +124,7 @@ public:
 
 	virtual Vocab get_param_vocab()const;
 	void compile_gradient(cairo_pattern_t* gradient, CircleDataCache cache, FALLOFF_FUNC *func)const;
+	virtual bool simplified_cairo_visible()const { return true; }
 };
 
 /* -- E X T E R N S --------------------------------------------------------- */
