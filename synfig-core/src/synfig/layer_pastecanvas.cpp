@@ -761,6 +761,6 @@ Layer_PasteCanvas::set_render_method(Context context, RenderMethod x)
 		canvas->get_context(context).set_render_method(x);
 
 	// in any case pass it down
-	context.set_render_method(x);
+	Layer::set_render_method(context,x);
 }
 
