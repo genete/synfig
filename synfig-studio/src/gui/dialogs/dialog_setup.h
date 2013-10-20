@@ -207,6 +207,7 @@ class Dialog_Setup : public Gtk::Dialog
 	Gtk::Entry image_sequence_separator;
 	Gtk::CheckButton toggle_navigator_uses_cairo;
 	Gtk::CheckButton toggle_workarea_uses_cairo;
+	Gtk::CheckButton toggle_cairo_is_simplified;
 public:
 
 	void set_time_format(synfig::Time::Format time_format);

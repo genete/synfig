@@ -299,6 +299,7 @@ String studio::App::browser_command("xdg-open"); // Linux XDG standard
 String studio::App::sequence_separator(".");
 bool studio::App::navigator_uses_cairo=false;
 bool studio::App::workarea_uses_cairo=false;
+bool studio::App::cairo_is_simplified=true;
 
 static int max_recent_files_=25;
 int studio::App::get_max_recent_files() { return max_recent_files_; }
@@ -612,6 +613,11 @@ public:
 				value=strprintf("%i",(int)App::workarea_uses_cairo);
 				return true;
 			}
+			if(key=="cairo_is_simplified")
+			{
+				value=strprintf("%i",(int)App::cairo_is_simplified);
+				return true;
+			}
 		}
 		catch(...)
 		{
@@ -744,6 +750,12 @@ public:
 				App::workarea_uses_cairo=i;
 				return true;
 			}
+			if(key=="cairo_is_simplified")
+			{
+				int i(atoi(value.c_str()));
+				App::cairo_is_simplified=i;
+				return true;
+			}
 		}
 		catch(...)
 		{
@@ -776,6 +788,7 @@ public:
 		ret.push_back("sequence_separator");
 		ret.push_back("navigator_uses_cairo");
 		ret.push_back("workarea_uses_cairo");
+		ret.push_back("cairo_is_simplified");
 		return ret;
 	}
 };
@@ -1819,6 +1832,7 @@ App::reset_initial_preferences()
 	synfigapp::Main::settings().set_value("sequence_separator", ".");
 	synfigapp::Main::settings().set_value("navigator_uses_cairo", "0");
 	synfigapp::Main::settings().set_value("workarea_uses_cairo", "0");
+	synfigapp::Main::settings().set_value("cairo_is_simplified", "1");
 }
 
 bool

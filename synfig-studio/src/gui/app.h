@@ -227,6 +227,7 @@ public:
 	static synfig::String sequence_separator;
 	static bool navigator_uses_cairo;
 	static bool workarea_uses_cairo;
+	static bool cairo_is_simplified;
 	/*
  -- ** -- S I G N A L S -------------------------------------------------------
 	*/

@@ -304,6 +304,9 @@ Dialog_Setup::Dialog_Setup():
 	// Render - Use Cairo on WorkArea
 	attach_label(render_table, _("Use Cairo render on WorkArea"), 2, xpadding, ypadding);
 	render_table->attach(toggle_workarea_uses_cairo, 1, 2, 2, 3, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK|Gtk::FILL, xpadding, ypadding);
+	// Render - Use Cairo on WorkArea
+	attach_label(render_table, _("Cairo render is simplified"), 3, xpadding, ypadding);
+	render_table->attach(toggle_cairo_is_simplified, 1, 2, 3, 4, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK|Gtk::FILL, xpadding, ypadding);
 
 	show_all_children();
 }
@@ -377,6 +380,9 @@ Dialog_Setup::on_apply_pressed()
 
 	// Set the workarea uses cairo flag
 	App::workarea_uses_cairo=toggle_workarea_uses_cairo.get_active();
+
+	// Set the cairo is simplified flag
+	App::cairo_is_simplified=toggle_cairo_is_simplified.get_active();
 
 	App::save_settings();
 
@@ -534,6 +540,9 @@ Dialog_Setup::refresh()
 
 	// Refresh the status of the workarea_uses_cairo flag
 	toggle_workarea_uses_cairo.set_active(App::workarea_uses_cairo);
+
+	// Refresh the status of the workarea_uses_cairo flag
+	toggle_cairo_is_simplified.set_active(App::cairo_is_simplified);
 }
 
 GammaPattern::GammaPattern():
