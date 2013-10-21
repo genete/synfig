@@ -2942,9 +2942,12 @@ studio::WorkArea::async_update_preview()
 	// if we have lots of pixels to render and the tile renderer isn't disabled, use it
 	int div;
 	div = low_resolution ? low_res_pixel_size : 1;
+	bool cairo_simplified=studio::App::cairo_is_simplified;
 	if(studio::App::workarea_uses_cairo)
 	{
-		if ((w*h > 240*div*135*div && !getenv("SYNFIG_DISABLE_TILE_RENDER")) || getenv("SYNFIG_FORCE_TILE_RENDER"))
+		if ((w*h > 240*div*135*div && !getenv("SYNFIG_DISABLE_TILE_RENDER") && !cairo_simplified) 
+			||
+			getenv("SYNFIG_FORCE_TILE_RENDER"))
 		{
 			handle<WorkAreaTarget_Cairo_Tile> trgt(new class WorkAreaTarget_Cairo_Tile(this,w,h));
 			trgt->set_rend_desc(&desc);
@@ -2958,7 +2961,7 @@ studio::WorkArea::async_update_preview()
 			trgt->set_onion_skin(get_onion_skin(), onion_skins);
 			target=trgt;
 		}
-		if(studio::App::cairo_is_simplified)
+		if(cairo_simplified)
 			target->set_method(SIMPLIFIED_CAIRO);
 		else
 			target->set_method(CAIRO);
