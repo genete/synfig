@@ -63,6 +63,7 @@
 #include "widgets/widget_color.h"
 #include <synfig/distance.h>
 #include <synfig/context.h>
+#include <synfig/rendermethod.h>
 
 #include "workarearenderer/workarearenderer.h"
 #include "workarearenderer/renderer_background.h"
@@ -280,8 +281,8 @@ public:
 		synfig::Mutex::Lock lock(mutex);
 		if(cairo_surface_status(tile_surface))
 			return false;
-
-		gamma_filter(tile_surface, App::gamma);
+		if(get_method()!=SIMPLIFIED_CAIRO)
+			gamma_filter(tile_surface, App::gamma);
 		x/=get_tile_w();
 		y/=get_tile_h();
 		int tw(rend_desc().get_w()/get_tile_w());
@@ -721,7 +722,8 @@ public:
 	{
 		if(!workarea)
 			return false;
-		gamma_filter(surf, App::gamma);
+		if(get_method()!=SIMPLIFIED_CAIRO)
+			gamma_filter(surf, App::gamma);
 		if(cairo_surface_status(surf))
 		{
 			if(cb) cb->error(_("Cairo Surface bad status"));
@@ -2943,6 +2945,9 @@ studio::WorkArea::async_update_preview()
 	int div;
 	div = low_resolution ? low_res_pixel_size : 1;
 	bool cairo_simplified=studio::App::cairo_is_simplified;
+	synfig::info("async_update_preview");
+	synfig::info("w=%d", w);
+	synfig::info("h=%d", h);
 	if(studio::App::workarea_uses_cairo)
 	{
 		if ((w*h > 240*div*135*div && !getenv("SYNFIG_DISABLE_TILE_RENDER") && !cairo_simplified) 
