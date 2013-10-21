@@ -115,6 +115,7 @@ synfig::Layer_Bitmap::get_param(const String & param)const
 				ret2=int(surface.get_w());
 				break;
 				case CAIRO:
+				case SIMPLIFIED_CAIRO:
 				default:
 				ret2=int(csurface.get_w());
 				break;
@@ -133,6 +134,7 @@ synfig::Layer_Bitmap::get_param(const String & param)const
 				ret2=int(surface.get_h());
 				break;
 			case CAIRO:
+			case SIMPLIFIED_CAIRO:
 			default:
 				ret2=int(csurface.get_h());
 				break;

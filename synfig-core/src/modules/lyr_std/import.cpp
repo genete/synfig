@@ -210,6 +210,7 @@ Import::set_param(const String & param, const ValueBase &value)
 				return false;
 			}
 		case CAIRO:
+		case SIMPLIFIED_CAIRO:
 			{
 				
 				if(filename==newfilename && cimporter)
@@ -339,6 +340,7 @@ Import::set_time(IndependentContext context, Time time)const
 	case OPENGL:
 		break;
 	case CAIRO:
+	case SIMPLIFIED_CAIRO:
 		{
 
 			if(get_amount() && cimporter &&
@@ -375,6 +377,7 @@ Import::set_time(IndependentContext context, Time time, const Point &pos)const
 		case OPENGL:
 			break;
 		case CAIRO:
+		case SIMPLIFIED_CAIRO:
 		{
 
 			if(get_amount() && cimporter &&
