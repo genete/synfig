@@ -38,6 +38,7 @@
 #include "color.h"
 #include "canvas.h"
 #include "targetparam.h"
+#include "rendermethod.h"
 
 /* === M A C R O S ========================================================= */
 
@@ -174,6 +175,9 @@ public:
 	//! The current frame being rendered
 	int curr_frame_;
 
+	//! The RenderMethod to pass down the Context before render.
+	RenderMethod method_;
+
 protected:
 	//! Default constructor
 	Target();
@@ -210,6 +214,10 @@ public:
 	**	\a desc to fit its needs.
 	*/
 	virtual bool set_rend_desc(RendDesc *d) { desc=*d; return true; }
+	//! Sets the RenderMethod
+	void set_method(RenderMethod r) { method_=r; }
+	//! Gets the RenderMethod
+	RenderMethod get_method()const { return method_; }
 	//! Renders the canvas to the target
 	virtual bool render(ProgressCallback *cb=NULL)=0;
 	//! Initialization tasks of the derived target.

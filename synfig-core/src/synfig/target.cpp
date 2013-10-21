@@ -98,7 +98,8 @@ Target::Target():
 	gamma_(*default_gamma_),
 	remove_alpha(false),
 	avoid_time_sync_(false),
-	curr_frame_(0)
+	curr_frame_(0),
+	method_(SOFTWARE)
 {
 }
 
