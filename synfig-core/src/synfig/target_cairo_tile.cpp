@@ -225,7 +225,7 @@ synfig::Target_Cairo_Tile::render(ProgressCallback *cb)
 			Context context;
 			// pass the Render Method to the context
 			context=canvas->get_context(context_params);
-			context.set_render_method(CAIRO);
+			context.set_render_method(get_method());
 
 			// Set the time that we wish to render
 			if(!get_avoid_time_sync() || canvas->get_time()!=t)

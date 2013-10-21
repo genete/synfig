@@ -2958,7 +2958,10 @@ studio::WorkArea::async_update_preview()
 			trgt->set_onion_skin(get_onion_skin(), onion_skins);
 			target=trgt;
 		}
-
+		if(studio::App::cairo_is_simplified)
+			target->set_method(SIMPLIFIED_CAIRO);
+		else
+			target->set_method(CAIRO);
 	}
 	else if ((w*h > 240*div*135*div && !getenv("SYNFIG_DISABLE_TILE_RENDER")) || getenv("SYNFIG_FORCE_TILE_RENDER"))
 	{

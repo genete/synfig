@@ -115,6 +115,7 @@ public:
 		set_clipping(warm_target->get_clipping());
 		set_rend_desc(&warm_target->rend_desc());
 		alive_flag=true;
+		set_method(warm_target->get_method());
 #ifndef GLIB_DISPATCHER_BROKEN
 		ready_connection=tile_ready_signal.connect(sigc::mem_fun(*this,&AsyncTarget_Tile::tile_ready));
 #endif
@@ -300,6 +301,7 @@ public:
 		set_clipping(warm_target->get_clipping());
 		set_rend_desc(&warm_target->rend_desc());
 		alive_flag=true;
+		set_method(warm_target->get_method());
 #ifndef GLIB_DISPATCHER_BROKEN
 		ready_connection=tile_ready_signal.connect(sigc::mem_fun(*this,&AsyncTarget_Cairo_Tile::tile_ready));
 #endif
@@ -459,6 +461,7 @@ public:
 		set_threads(warm_target->get_threads());
 		set_rend_desc(&warm_target->rend_desc());
 		alive_flag=true;
+		set_method(warm_target->get_method());
 #ifndef GLIB_DISPATCHER_BROKEN
 		ready_connection=frame_ready_signal.connect(sigc::mem_fun(*this,&AsyncTarget_Scanline::frame_ready));
 #endif
@@ -587,6 +590,7 @@ public:
 		set_remove_alpha(warm_target->get_remove_alpha());
 		set_rend_desc(&warm_target->rend_desc());
 		alive_flag=true;
+		set_method(warm_target->get_method());
 #ifndef GLIB_DISPATCHER_BROKEN
 		ready_connection=frame_ready_signal.connect(sigc::mem_fun(*this,&AsyncTarget_Cairo::frame_ready));
 #endif
