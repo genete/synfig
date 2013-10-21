@@ -40,7 +40,7 @@
 #include "time.h"
 #include "guid.h"
 #include "interpolation.h"
-#include "target.h" // for RenderMethod. TODO: put RenderMethod apart
+#include "value.h"
 
 #include "cairo.h"
 #include "rendermethod.h"

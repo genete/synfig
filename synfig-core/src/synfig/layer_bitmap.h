@@ -30,7 +30,6 @@
 
 #include "layer_composite.h"
 #include "surface.h"
-#include "target.h" // for RenderMethod
 
 /* === M A C R O S ========================================================= */
 
