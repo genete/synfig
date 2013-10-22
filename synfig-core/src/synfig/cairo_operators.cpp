@@ -48,7 +48,7 @@ using namespace synfig;
 
 /* === P R O C E D U R E S ================================================= */
 
-void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMethod method)
+void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMethod method, RenderMethod m)
 {
 	cairo_t* cr=cairo_reference(acr);
 	switch (method)
@@ -62,15 +62,15 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 		case Color::BLEND_STRAIGHT:
 		{
 			cairo_save(cr);
-			
+
 			cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0-alpha);
 			cairo_set_operator(cr, CAIRO_OPERATOR_DEST_IN);
 			cairo_paint(cr);
-			
+
 			cairo_restore(cr);
-			
+
 			cairo_set_operator(cr, CAIRO_OPERATOR_ADD);
-			cairo_paint_with_alpha(cr, alpha);		
+			cairo_paint_with_alpha(cr, alpha);
 			break;
 		}
 		case Color::BLEND_MULTIPLY:
@@ -86,12 +86,18 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_pattern_t* pattern=cairo_pattern_create_for_surface(cairo_get_target(cr));
 			cairo_pattern_set_matrix(pattern, &matrix);
 			cairo_mask(cr, pattern);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
 		}
 		case Color::BLEND_HUE:
 		{
+			if (m==SIMPLIFIED_CAIRO)
+			{
+				cairo_set_operator(cr, CAIRO_OPERATOR_ATOP);
+				cairo_paint_with_alpha(cr, alpha);
+				break;
+			}
 			cairo_push_group(cr);
 			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 			cairo_paint_with_alpha(cr, alpha);
@@ -103,7 +109,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_pattern_t* pattern=cairo_pattern_create_for_surface(cairo_get_target(cr));
 			cairo_pattern_set_matrix(pattern, &matrix);
 			cairo_mask(cr, pattern);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
 		}
@@ -120,7 +126,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_pattern_t* pattern=cairo_pattern_create_for_surface(cairo_get_target(cr));
 			cairo_pattern_set_matrix(pattern, &matrix);
 			cairo_mask(cr, pattern);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
 		}
@@ -137,7 +143,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_pattern_t* pattern=cairo_pattern_create_for_surface(cairo_get_target(cr));
 			cairo_pattern_set_matrix(pattern, &matrix);
 			cairo_mask(cr, pattern);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
 		}
@@ -159,19 +165,25 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 			cairo_paint_with_alpha(cr, alpha);
 			cairo_pop_group_to_source(cr);
-			
+
 			cairo_matrix_t matrix;
 			cairo_get_matrix(cr, &matrix);
 			cairo_set_operator(cr, CAIRO_OPERATOR_SCREEN);
 			cairo_pattern_t* pattern=cairo_pattern_create_for_surface(cairo_get_target(cr));
 			cairo_pattern_set_matrix(pattern, &matrix);
 			cairo_mask(cr, pattern);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
 		}
 		case Color::BLEND_HARD_LIGHT:
 		{
+			if (m==SIMPLIFIED_CAIRO)
+			{
+				cairo_set_operator(cr, CAIRO_OPERATOR_ATOP);
+				cairo_paint_with_alpha(cr, alpha);
+				break;
+			}
 			cairo_push_group(cr);
 			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 			cairo_paint_with_alpha(cr, alpha);
@@ -183,7 +195,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_pattern_t* pattern=cairo_pattern_create_for_surface(cairo_get_target(cr));
 			cairo_pattern_set_matrix(pattern, &matrix);
 			cairo_mask(cr, pattern);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
 		}
@@ -198,17 +210,17 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 //		{
 //			cairo_push_group(cr);
 //			cairo_save(cr);
-//			
+//
 //			cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0-alpha);
 //			cairo_set_operator(cr, CAIRO_OPERATOR_DEST_IN);
 //			cairo_paint(cr);
-//			
+//
 //			cairo_restore(cr);
-//			
+//
 //			cairo_set_operator(cr, CAIRO_OPERATOR_ADD);
 //			cairo_paint_with_alpha(cr, alpha);
 //			cairo_pop_group_to_source(cr);
-//						
+//
 //			cairo_matrix_t matrix;
 //			cairo_get_matrix(cr, &matrix);
 //			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
@@ -221,11 +233,17 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 //		}
 		case Color::BLEND_OVERLAY:
 		{
+			if (m==SIMPLIFIED_CAIRO)
+			{
+				cairo_set_operator(cr, CAIRO_OPERATOR_ATOP);
+				cairo_paint_with_alpha(cr, alpha);
+				break;
+			}
 			cairo_push_group(cr);
 			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 			cairo_paint(cr);
 			cairo_pattern_t* pattern=cairo_pop_group(cr);
-			
+
 			cairo_surface_t* source;
 			cairo_status_t status;
 			status=cairo_pattern_get_surface(pattern, &source);
@@ -234,7 +252,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 				// return gracefully
 				synfig::error("%s", cairo_status_to_string(status));
 				cairo_pattern_destroy(pattern);
-				return;
+				break;
 			}
 			CairoSurface csource(source);
 			CairoSurface cdest(cairo_get_target(cr));
@@ -243,16 +261,16 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			{
 					// return gracefully
 					cairo_pattern_destroy(pattern);
-					return;
+					break;
 			}
 			if(!csource.map_cairo_image())
 			   {
 				   // return gracefully
 				   cairo_pattern_destroy(pattern);
 				   cdest.unmap_cairo_image();
-				   return;
+				   break;
 			   }
-			
+
 			double x1, y1, x2, y2, x0, y0;
 			cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
 			cairo_user_to_device(cr, &x1, &y1);
@@ -272,7 +290,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 				}
 			csource.unmap_cairo_image();
 			cdest.unmap_cairo_image();
-			
+
 			cairo_save(cr);
 			cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 			cairo_reset_clip(cr);
@@ -280,10 +298,10 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_set_source_surface(cr, source, 0, 0);
 			cairo_paint(cr);
 			cairo_restore(cr);
-			
+
 			cairo_pattern_destroy(pattern);
 			break;
-			
+
 		}
 		case Color::BLEND_BRIGHTEN:
 		case Color::BLEND_DARKEN:
@@ -294,11 +312,17 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 		case Color::BLEND_ALPHA_DARKEN:
 		case Color::BLEND_ALPHA_BRIGHTEN:
 		{
+			if (m==SIMPLIFIED_CAIRO)
+			{
+				cairo_set_operator(cr, CAIRO_OPERATOR_ATOP);
+				cairo_paint_with_alpha(cr, alpha);
+				break;
+			}
 			cairo_push_group(cr);
 			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 			cairo_paint(cr);
 			cairo_pattern_t* pattern=cairo_pop_group(cr);
-			
+
 			cairo_surface_t* source;
 			cairo_status_t status;
 			status=cairo_pattern_get_surface(pattern, &source);
@@ -307,23 +331,23 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 				// return gracefully
 				synfig::error("%s", cairo_status_to_string(status));
 				cairo_pattern_destroy(pattern);
-				return;
+				break;
 			}
 			CairoSurface csource(source);
 			CairoSurface cdest(cairo_get_target(cr));
-			
+
 			if(!cdest.map_cairo_image())
 			{
 				// return gracefully
 				cairo_pattern_destroy(pattern);
-				return;
+				break;
 			}
 			if(!csource.map_cairo_image())
 			{
 				// return gracefully
 				cairo_pattern_destroy(pattern);
 				cdest.unmap_cairo_image();
-				return;
+				break;
 			}
 			double x1, y1, x2, y2, x0, y0;
 			cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
@@ -331,7 +355,7 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 			cairo_user_to_device(cr, &x2, &y2);
 			x0=x2<x1?x2:x1;
 			y0=y2<y1?y2:y1;
-			
+
 			int w=csource.get_w();
 			int h=csource.get_h();
 			int h0=(int)y0;
@@ -354,11 +378,17 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 		case Color::BLEND_COLOR:
 		default:
 		{
+			if (m==SIMPLIFIED_CAIRO)
+			{
+				cairo_set_operator(cr, CAIRO_OPERATOR_ATOP);
+				cairo_paint_with_alpha(cr, alpha);
+				break;
+			}
 			cairo_push_group(cr);
 			cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 			cairo_paint(cr);
 			cairo_pattern_t* pattern=cairo_pop_group(cr);
-			
+
 			cairo_surface_t* source;
 			cairo_status_t status;
 			status=cairo_pattern_get_surface(pattern, &source);
@@ -367,37 +397,37 @@ void cairo_paint_with_alpha_operator(cairo_t* acr, float alpha, Color::BlendMeth
 				// return gracefully
 				synfig::error("%s", cairo_status_to_string(status));
 				cairo_pattern_destroy(pattern);
-				return;
+				break;
 			}
 			CairoSurface csource(source);
 			CairoSurface cdest(cairo_get_target(cr));
-			
+
 			if(!cdest.map_cairo_image())
 			{
 				// return gracefully
 				cairo_pattern_destroy(pattern);
-				return;
+				break;
 			}
 			if(!csource.map_cairo_image())
 			{
 				// return gracefully
 				cairo_pattern_destroy(pattern);
 				cdest.unmap_cairo_image();
-				return;
+				break;
 			}
-			
+
 			double x1, y1, x2, y2, x0, y0;
 			cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
 			cairo_user_to_device(cr, &x1, &y1);
 			cairo_user_to_device(cr, &x2, &y2);
 			x0=x2<x1?x2:x1;
 			y0=y2<y1?y2:y1;
-			
+
 			int w=csource.get_w();
 			int h=csource.get_h();
 			int h0=(int)y0;
 			int w0=(int)x0;
-			
+
 			for(int y=0;y<h;y++)
 				for(int x=0;x<w;x++)
 				{
@@ -444,7 +474,7 @@ void cairo_surface_mask_alpha(cairo_surface_t* image, float alpha)
 	cairo_set_operator(cr, CAIRO_OPERATOR_ATOP);
 	cairo_paint_with_alpha(cr, alpha);
 	cairo_destroy(cr);
-	
+
 }
 
 

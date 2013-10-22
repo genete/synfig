@@ -28,17 +28,18 @@
 /* === H E A D E R S ======================================================= */
 #include "color.h"
 #include "cairo.h"
+#include "rendermethod.h"
 
 /* === M A C R O S ========================================================= */
 
 /* === T Y P E D E F S ===================================================== */
 
 /* === C L A S S E S & S T R U C T S ======================================= */
-void cairo_paint_with_alpha_operator(cairo_t* cr, float alpha, synfig::Color::BlendMethod method);
+
+void cairo_paint_with_alpha_operator(cairo_t* cr, float alpha, synfig::Color::BlendMethod method, synfig::RenderMethod m=synfig::CAIRO);
 void cairo_copy_surface(cairo_surface_t* source, cairo_surface_t* dest, float alpha=1.0);
 cairo_surface_t* cairo_copy_target_image(cairo_surface_t* target, float alpha=1.0);
 void cairo_surface_mask_alpha(cairo_surface_t* image, float alpha);
-
 
 //void cairo_paint_operator(cairo_t* cr, Color::BlendMethod method);
 //void cairo_stroke_operator(cairo_t* cr, Color::BlendMethod method);
