@@ -405,10 +405,14 @@ Import::set_render_method(Context context, RenderMethod x)
 {
 	if(get_method() != x) // if the method is different
 	{
+		// Calls ancestor member implementation
+		// which will set method and pass it down
+		Layer::set_render_method(context, x);
 		importer=0; // invalidate the importer
 		cimporter=0;
 		set_param("filename", param_filename); // this will update the importer to the new type
 	}
-	// Calls ancestor member implementation
-	Layer::set_render_method(context, x);
+	else
+		// just pass it down
+		context.set_render_method(x);
 }
