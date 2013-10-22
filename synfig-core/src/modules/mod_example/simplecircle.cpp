@@ -233,7 +233,7 @@ SimpleCircle::accelerated_cairorender(Context context, cairo_t *cr, int quality,
 	cairo_arc(cr, center[0], center[1], radius, 0.0f, 2*M_PI);
 	cairo_clip(cr);
 	cairo_set_source_rgba(cr, r, g, b, a);
-	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	cairo_restore(cr);
 	
 	if(cb && !cb->amount_complete(10000,10000))

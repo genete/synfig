@@ -863,7 +863,7 @@ Circle::accelerated_cairorender(Context context,cairo_t *cr, int quality, const 
 			cairo_clip(cr);
 			cairo_paint(cr);
 			cairo_pop_group_to_source(cr);
-			cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+			cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(),get_method());
 		}
 		else
 		{
@@ -871,7 +871,7 @@ Circle::accelerated_cairorender(Context context,cairo_t *cr, int quality, const 
 			cairo_set_source_rgba(cr, r, g, b, a);
 			cairo_arc(cr, origin[0], origin[1], out_radius, 0., 2*M_PI);
 			cairo_clip(cr);
-			cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+			cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 			cairo_restore(cr);
 		}
 	}
@@ -881,7 +881,7 @@ Circle::accelerated_cairorender(Context context,cairo_t *cr, int quality, const 
 		cairo_pattern_t* gradient=cairo_pattern_create_radial(origin[0], origin[1], in_radius, origin[0], origin[1], out_radius);
 		compile_gradient(gradient, cache, func);
 		cairo_set_source(cr, gradient);
-		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 		cairo_pattern_destroy(gradient);
 		cairo_restore(cr);
 	}

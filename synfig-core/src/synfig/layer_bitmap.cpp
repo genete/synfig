@@ -770,7 +770,7 @@ Layer_Bitmap::accelerated_cairorender(Context context, cairo_t *cr, int quality,
 	// set the surface, filter, and paint
 	cairo_pattern_set_filter(cairo_get_source(cr), filter);
 	cairo_set_source_surface(cr, cs, 0,0);
-	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	// we don't need cs anymore
 	cairo_surface_destroy(cs);
 	cairo_restore(cr);

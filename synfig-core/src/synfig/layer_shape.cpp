@@ -2806,7 +2806,7 @@ Layer_Shape::accelerated_cairorender(Context context,cairo_t *cr, int quality, c
 		cairo_translate(cr, wtlx, wtly);
 		cairo_scale(cr, wpw, wph);
 		cairo_set_source_surface(cr, subimage, 0, 0);
-		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 		cairo_restore(cr);
 		cairo_surface_destroy(subimage);
 		return true;
@@ -2836,13 +2836,13 @@ Layer_Shape::accelerated_cairorender(Context context,cairo_t *cr, int quality, c
 		cairo_clip(cr);
 		cairo_paint(cr);
 		cairo_pop_group_to_source(cr);
-		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	}
 	else
 	{
 		Layer_Shape::shape_to_cairo(cr);
 		cairo_clip(cr);
-		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	}
 	cairo_restore(cr);
 	return true;

@@ -339,7 +339,7 @@ ConicalGradient::accelerated_cairorender(Context context,cairo_t *cr,int quality
 	}
 	cairo_translate(cr, center[0], center[1]);
 	cairo_set_source(cr, pattern);
-	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	
 	cairo_pattern_destroy(pattern); // Not needed more
 	cairo_restore(cr);

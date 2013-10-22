@@ -657,7 +657,7 @@ Rectangle::accelerated_cairorender(Context context, cairo_t *cr, int quality, co
 	else
 		cairo_clip(cr);
 	
-	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	cairo_restore(cr);
 
 	return  true;

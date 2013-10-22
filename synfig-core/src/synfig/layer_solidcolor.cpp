@@ -225,7 +225,7 @@ Layer_SolidColor::accelerated_cairorender(Context context, cairo_t *cr, int qual
 	cairo_save(cr);
 	cairo_reset_clip(cr);
 	cairo_set_source_rgba(cr, r, g, b, a);
-	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	cairo_restore(cr);
 
 	// Mark our progress as finished

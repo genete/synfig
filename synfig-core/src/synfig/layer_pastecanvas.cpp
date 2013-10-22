@@ -719,7 +719,7 @@ Layer_PasteCanvas::accelerated_cairorender(Context context,cairo_t *cr, int qual
 	// compensate the pending transformations form cr to be applied.
 	cairo_transform(cr, &matrix);
 	cairo_set_source_surface(cr, pastesurface, 0, 0);
-	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+	cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 
 	cairo_restore(cr);
 	cairo_surface_destroy(pastesurface);

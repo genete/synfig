@@ -1149,7 +1149,7 @@ Layer_Freetype::accelerated_cairorender(Context context, cairo_t *cr, int qualit
 	}
 	else
 	{
-		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method());
+		cairo_paint_with_alpha_operator(cr, get_amount(), get_blend_method(), get_method());
 	}
 	cairo_restore(cr);
 	
